@@ -12,6 +12,10 @@ interface DialogTwoInputsStatefulProps {
   classNameInputFields: string;
 }
 
+/**
+ * a small modal with two inputs.
+ * we use this e.g. for the "create map" dialog and the "create node" dialog.
+ */
 export const DialogTwoInputs: React.FC<DialogTwoInputsStatefulProps> = ({
   topInput,
   bottomInput,
