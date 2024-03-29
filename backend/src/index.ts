@@ -10,6 +10,8 @@ import { appRouter } from "./routers/_app";
 const server = createHTTPServer({
   middleware: cors({
     origin: [
+      env.get("WEB_PAGE_DOMAIN"),
+      // TODO: un-hardcode these
       "http://localhost:3000",
       "http://127.0.0.1:3000",
       "https://rememberry.app",

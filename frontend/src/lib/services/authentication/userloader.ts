@@ -11,18 +11,27 @@ export async function userLoader(session?: string) {
   if (!session) return null;
   const host = getHost();
   const url = host + "/api/auth/user?session=" + session;
-  const response = await fetch(url);
 
-  const user: FetchedUser = await response.json();
+  // TODO: proper error handling
+  try {
+    const response = await fetch(url);
 
-  if (response.status === 400 || !user.user) return null;
+    const user: FetchedUser = await response.json();
 
-  return user.user;
+    if (response.status === 400 || !user.user) return null;
+
+    return user.user;
+  } catch (err) {
+    console.error("userLoader:", url, err);
+
+    return null;
+  }
 }
 
 const getHost = () => {
   if (env.IS_DEV) {
-    return "http://127.0.0.1:3000";
+    // TODO: un-hardcode these
+    return "http://127.0.0.1:3001";
   } else if (env.IS_STAGING) {
     return "https://web.stage.rememberry.app";
   } else {
