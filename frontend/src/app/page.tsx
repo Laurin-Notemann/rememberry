@@ -4,6 +4,7 @@ import FlowBackground from "@/components/Flow/Background/flowBackground";
 import MapCard from "@/components/Flow/CardComponents/MapCard";
 import { DialogTwoInputs } from "@/components/Flow/CustomComponents/DialogTwoInputs";
 import FlowFooter from "@/components/Flow/CustomComponents/flowFooter";
+import useCreateOrUpdateMapDialog from "@/components/Flow/MapMenu/useCreateOrUpdateMapDialog";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/lib/services/authentication/userStore";
 import useCreateMap from "@/lib/services/maps/useCreateMap";
@@ -12,29 +13,38 @@ import useGetMapByUserId from "@/lib/services/maps/useGetMapsByUserId";
 import useUpdateMap from "@/lib/services/maps/useUpdateMap";
 import { Box } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import "reactflow/dist/style.css";
 
 function MapMenu() {
   const { isLoading, maps } = useGetMapByUserId();
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [isCreate, setIsCreate] = useState(false);
+
   const userId = useUserStore((state) => state.user?.id || null);
   const createMap = useCreateMap();
   const router = useRouter();
   const deleteMap = useDeleteMap();
   const updateMap = useUpdateMap();
-  const [dialogName, setDialogName] = useState("");
-  const [dialogDescription, setDialogDescription] = useState("");
-  const [mapIdEdit, setMapIdEdit] = useState("");
 
-  if (isLoading) return null;
+  const {
+    dialogOpen,
+    isCreate,
+    dialogName,
+    dialogDescription,
+    mapIdEdit,
 
-  const sortedMaps = maps.sort(
+    openDialog,
+    closeDialog,
+  } = useCreateOrUpdateMapDialog();
+
+  if (!userId || isLoading) return null;
+
+  const mapsSortedByDescendingCreatedDate = maps.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 
-  const handleSubmitDialog = async (name: string, description: string) => {
+  /**
+   * handles the creation or editing of a map.
+   */
+  const createOrUpdateMap = async (name: string, description: string) => {
     if (userId) {
       if (isCreate) {
         const [_err, map] = await createMap({
@@ -64,28 +74,6 @@ function MapMenu() {
     }
   };
 
-  const openDialog = (
-    isCreate: boolean,
-    name = "",
-    description = "",
-    mapId?: string,
-  ) => {
-    setDialogOpen(true);
-    setIsCreate(isCreate);
-    setDialogName(name);
-    setDialogDescription(description);
-    if (!isCreate && mapId) {
-      setMapIdEdit(mapId);
-    }
-  };
-
-  const closeDialog = () => {
-    setDialogOpen(false);
-    setDialogName("");
-    setDialogDescription("");
-    setMapIdEdit("");
-  };
-
   return (
     <div className="relative w-full h-full">
       <div className="fixed">
@@ -99,7 +87,7 @@ function MapMenu() {
             placeholderTopInput={"Name"}
             placeholderBottomInput={"Description"}
             isDialogOpen={dialogOpen}
-            onSubmit={handleSubmitDialog}
+            onSubmit={createOrUpdateMap}
             closeDialog={closeDialog}
             classNameInputFields={""}
           />
@@ -111,7 +99,7 @@ function MapMenu() {
           <h1 className="">Which map do you want to learn today?</h1>
         </div>
         <div id="body" className="flex content-start p-20 flex-wrap">
-          {sortedMaps.map(
+          {mapsSortedByDescendingCreatedDate.map(
             (map: { id: string; name: string; description: string }) => (
               <>
                 <div className="outline-none   mx-5 my-5" key={map.id}>
