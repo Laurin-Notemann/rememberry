@@ -1,9 +1,0 @@
-build
-coverage
-node_modules
-dist
-.env
-.env.example
-.DS_Store
-drizzle
-package.json

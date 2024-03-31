@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@rememberry/frontend": ["./frontend/src"],
+      "@rememberry/backend": ["./backend/src"]
+    }
+  },
+  "references": [
+    {
+      "path": "./backend"
+    },
+    {
+      "path": "./frontend"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "rememberry",
+  "vesrion": "0.1.0",
+  "description": "Flashcard app",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": "18"
+  },
+  "workspaces": ["backend", "frontend"],
+  "scripts": {
+    "backend:build": "bun run --cwd ./backend build",
+    "backend:dev": "bun run --cwd ./backend dev",
+    "backend:migrate": "bun run --cwd ./backend migrate:generate",
+    "backend:lint": "bun run --cwd ./backend/ lint",
+    "frontend:build": "bun run --cwd ./frontend/ build",
+    "frontend:dev": "bun run --cwd ./frontend/ dev",
+    "frontend:lint": "bun run --cwd ./frontend/ lint",
+    "format": "biome format . --write",
+    "format:check": "biome format ."
+  },
+  "dependencies": {
+    "@tanstack/react-query": "v4.18",
+    "@trpc/client": "^10.45.0",
+    "@trpc/react-query": "^10.45.0",
+    "@trpc/server": "^10.45.0",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "dayjs": "^1.11.10",
+    "dotenv": "^16.3.1",
+    "superjson": "^2.2.1",
+    "typescript": "^5.4.3",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.6.3",
+    "@tanstack/eslint-plugin-query": "^4.38.0",
+    "@types/node": "20.5.9",
+    "@typescript-eslint/parser": "latest",
+    "eslint": "latest",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.2.5",
+    "prettier-eslint": "^16.3.0",
+    "prettier-plugin-jsdoc": "^1.3.0",
+    "prettier-plugin-organize-imports": "^3.2.3",
+    "prettier-plugin-tailwindcss": "^0.5.6"
+  }
+}
