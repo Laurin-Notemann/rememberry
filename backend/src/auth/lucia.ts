@@ -9,13 +9,14 @@ import { env } from "../env";
 const adapter = new DrizzlePostgreSQLAdapter(db.drizzle, session, users);
 
 export const getDomain = () => {
+  // TODO: DON'T HARDCODE
   if (env.get("NODE_ENV") === "staging") {
     return "stage.rememberry.app";
-  } else if (env.get("NODE_ENV") === "production") {
-    return "rememberry.app";
-  } else {
-    return "127.0.0.1";
   }
+  if (env.get("NODE_ENV") === "production") {
+    return "rememberry.app";
+  }
+  return "127.0.0.1";
 };
 
 export class LuciaAuth {

@@ -8,11 +8,11 @@ import { getTRPCError } from "../utils";
 const allowedHost = () => {
   if (env.get("NODE_ENV") === "staging") {
     return "web.stage.rememberry.app";
-  } else if (env.get("NODE_ENV") === "production") {
-    return "rememberry.app";
-  } else {
-    return "127.0.0.1:3000";
   }
+  if (env.get("NODE_ENV") === "production") {
+    return "rememberry.app";
+  }
+  return "127.0.0.1:3000";
 };
 
 const isLoggedIn = middleware(async ({ next, ctx }) => {

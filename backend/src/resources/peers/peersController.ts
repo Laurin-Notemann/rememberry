@@ -44,7 +44,8 @@ export async function controlKick(
   if (adminStatus) {
     const res = peersModels.kickMember(kickedUserId, peerId);
     return [null, res] as const;
-  } else if (errorCheck) {
+  }
+  if (errorCheck) {
     return [errorCheck, null] as const;
   }
   return [new TRPCError({ code: "UNAUTHORIZED" }), null];

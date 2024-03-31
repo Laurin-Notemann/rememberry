@@ -4,7 +4,7 @@ import { RouterInput, RouterOutput } from "../trpc/client";
 
 export type NodeData = Omit<NodeType, "id" | "xPosition" | "yPosition"> & {
   editNode: (nodeId: string) => void;
-  deleteNode: (input: NodeDeleteInput) => Promise<any>;
+  deleteNode: (input: NodeDeleteInput) => Promise<unknown>;
 };
 export type Node = ReactFlowNode<NodeData>;
 

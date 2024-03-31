@@ -20,7 +20,9 @@ export async function acceptInvite(invite: schema.Invite) {
       userId: invite.receiverId,
       peerId: invite.peerId,
     });
-    await tx.delete(schema.invites).where(eq(schema.invites.id, invite.id!));
+    //    if (invite) {
+    //      await tx.delete(schema.invites).where(eq(schema.invites.id, invite.id));
+    //    }
   });
   return res;
 }

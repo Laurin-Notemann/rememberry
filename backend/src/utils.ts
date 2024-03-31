@@ -37,6 +37,7 @@ export const getTRPCError = (
   return [defaultError, null] as const;
 };
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export const hasOnlyOneEntry = (content: any[]) => {
   if (content.length === 1) return true;
   return false;
@@ -73,6 +74,7 @@ export const catchDrizzleErrorOneEntry = async <T>(
   }
 };
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export const catchDrizzleErrorManyEntries = async <T extends any[]>(
   query: AsyncFunction<T>,
   logger?: Logger | null,

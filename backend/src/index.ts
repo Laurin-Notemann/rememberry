@@ -32,7 +32,8 @@ process.on("SIGHUP", async () => {
   env.updateEnv();
   let attempts = 0;
   const maxAttempts = 5;
-  let drizzle;
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  let drizzle: any;
 
   while (!drizzle && attempts < maxAttempts) {
     drizzle = await db.updateDBConnection();
@@ -52,6 +53,6 @@ process.on("SIGHUP", async () => {
   lucia.updateLucia(drizzle);
 });
 
-server.listen(env.get("PORT"));
+server.listen(env.get("BACKEND_PORT"));
 
-console.log("server listening on http://localhost:" + env.get("PORT"));
+console.log("server listening on http://localhost:" + env.get("BACKEND_PORT"));

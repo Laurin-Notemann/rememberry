@@ -3,7 +3,7 @@ exports type parsed environment variables (i.e. PORT: "420" becomes PORT: 420) f
 in staging and prod, these are sourced from process.env (injected via heroku), in development from the local .env file
 */
 import { config, parse } from "dotenv";
-import fs from "fs";
+import fs from "node:fs";
 import { z } from "zod";
 import { ScopedLogger } from "./logger";
 
@@ -15,7 +15,7 @@ const EnvZod = z.object({
   POSTGRES_DB: z.string(),
   POSTGRES_USER: z.string(),
   POSTGRES_PASSWORD: z.string(),
-  PORT: z.number(),
+  BACKEND_PORT: z.number(),
   REDIS_PORT: z.number(),
   REDIS_HOST: z.string(),
   REDIS_PASSWORD: z.string(),
@@ -23,7 +23,7 @@ const EnvZod = z.object({
 });
 
 function getEnvSrc() {
-  const { error, parsed } = config();
+  const { error, parsed } = config({ path: "../.env" });
 
   if (error || parsed == null) {
     const secretPath = process.env.VAULT_SECRET_PATH;
@@ -44,12 +44,13 @@ function parseEnv(env: { [key: string]: string }) {
     ...env,
     REDIS_PORT: parseInt(env.REDIS_PORT),
     POSTGRES_PORT: parseInt(env.POSTGRES_PORT),
-    PORT: parseInt(env.PORT),
-    NODE_ENV: env.NODE_ENV,
+    BACKEND_PORT: parseInt(env.BACKEND_PORT),
+    NODE_ENV: env.NODE_ENV ? env.NODE_ENV : "development",
     IS_PROD: env.NODE_ENV === "production",
   };
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 function validateEnv(env: { [key: string]: any }) {
   const parsedEnv = EnvZod.safeParse(env);
 
@@ -70,8 +71,11 @@ class Environment {
     this.logger = new ScopedLogger("Environment");
     const envForLogging = { ...this.env };
 
-    envForLogging.POSTGRES_PASSWORD = `${envForLogging.POSTGRES_PASSWORD.substring(0, 5)}*****`;
-    envForLogging.POSTGRES_USER = `${envForLogging.POSTGRES_USER.substring(0, 5)}*****`;
+    envForLogging.POSTGRES_PASSWORD = envForLogging.POSTGRES_PASSWORD.substring(
+      0,
+      5,
+    );
+    envForLogging.POSTGRES_USER = envForLogging.POSTGRES_USER.substring(0, 5);
 
     this.logger.info("init:", this.env);
   }
@@ -79,8 +83,11 @@ class Environment {
     this.env = validateEnv(parseEnv(getEnvSrc()));
     const envForLogging = { ...this.env };
 
-    envForLogging.POSTGRES_PASSWORD = `${envForLogging.POSTGRES_PASSWORD.substring(0, 5)}*****`;
-    envForLogging.POSTGRES_USER = `${envForLogging.POSTGRES_USER.substring(0, 5)}*****`;
+    envForLogging.POSTGRES_PASSWORD = envForLogging.POSTGRES_PASSWORD.substring(
+      0,
+      5,
+    );
+    envForLogging.POSTGRES_USER = envForLogging.POSTGRES_USER.substring(0, 5);
     this.logger.info("update:", this.env);
   }
 

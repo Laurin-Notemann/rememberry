@@ -1,16 +1,22 @@
 "use client";
 import classNames from "classnames";
-import { HelpCircle, Hourglass, Map, Sticker, Upload } from "lucide-react";
+import {
+  HelpCircle,
+  Hourglass,
+  LucideIcon,
+  Map,
+  Sticker,
+  Upload,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { SidebarButton } from "../ui/SidebarButton";
 import { SignOutButton } from "../ui/SignOutButton";
 
 interface SidebarElement {
   id: number;
-  label: String;
-  icon: React.FC<any>;
+  label: string;
+  icon: LucideIcon;
   link: string;
 }
 
