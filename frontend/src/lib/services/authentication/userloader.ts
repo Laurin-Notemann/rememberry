@@ -29,12 +29,10 @@ export async function userLoader(session?: string) {
 }
 
 const getHost = () => {
-  if (env.IS_DEV) {
+  if (env.IS_DEV)
     // TODO: un-hardcode these
-    return "http://127.0.0.1:3001";
-  } else if (env.IS_STAGING) {
-    return "https://web.stage.rememberry.app";
-  } else {
-    return "https://rememberry.app";
-  }
+    return `http://${env.FRONTEND_HOST}:${env.FRONTEND_PORT}`;
+  else
+    return `https://${env.FRONTEND_HOST}`;
+
 };

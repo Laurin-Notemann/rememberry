@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { TRPC_ERROR_CODE_KEY } from "@trpc/server/rpc";
 import { DatabaseError } from "pg";
 import { Logger } from "./logger";
+import { env } from "./env";
 
 /**
  * if message and error are undefined returns an Internal server error without a message
@@ -87,3 +88,10 @@ export const catchDrizzleErrorManyEntries = async <T extends any[]>(
     return getModelDefaultError(err, logger);
   }
 };
+
+export const getFrontendUrl = () => {
+  if (env.get("IS_PROD"))
+    return `https://${env.get("FRONTEND_HOST")}`
+  else
+    return `http://${env.get("FRONTEND_HOST")}:${env.get("FRONTEND_PORT")}`
+}

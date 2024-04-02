@@ -1,4 +1,5 @@
 import { createEnv } from "@t3-oss/env-nextjs";
+import { parseInt } from "lodash";
 import { z } from "zod";
 
 export const env = createEnv({
@@ -12,6 +13,8 @@ export const env = createEnv({
     IS_PROD: z.boolean(),
     IS_STAGING: z.boolean(),
     IS_DEV: z.boolean(),
+    FRONTEND_HOST: z.string(),
+    FRONTEND_PORT: z.number(),
   },
   /*
    * Environment variables available on the client (and server).
@@ -41,6 +44,8 @@ export const env = createEnv({
     IS_PROD: process.env.NODE_ENV === "production",
     IS_STAGING: process.env.APP_ENV === "staging",
     IS_DEV: process.env.APP_ENV === "development",
+    FRONTEND_HOST: process.env.FRONTEND_HOST,
+    FRONTEND_PORT: process.env.PORT ? parseInt(process.env.PORT) : 3000,
     NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
     NEXT_PUBLIC_IS_DEV: process.env.NEXT_PUBLIC_APP_ENV === "development",
     NEXT_PUBLIC_BACKEND_HOST: process.env.NEXT_PUBLIC_BACKEND_HOST,

@@ -2,26 +2,19 @@ services:
   rembackend:
     container_name: rembackend
     build:
-      context: backend
-      dockerfile: Dockerfile
-    environment:
-      POSTGRES_PORT: ${POSTGRES_PORT}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      NODE_ENV: ${NODE_ENV}
-      PORT: ${PORT}
-      REDIS_PORT: ${REDIS_PORT}
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-      REDIS_HOST: ${REDIS_HOST}
-      WEB_PAGE_DOMAIN: ${WEB_PAGE_DOMAIN}
-      VAULT_SECRET_PATH: ${VAULT_SECRET_PATH}
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./dev-creds:/vault/secrects/db-creds
     networks:
       - rem-net
     ports:
       - "127.0.0.1:3050:3050"
     depends_on:
       - postgres_database
-      - redis-cache
+        #- redis-cache
 
   postgres_database:
     container_name: postgres_database
@@ -34,42 +27,21 @@ services:
       - postgres:/data/postgres
       - ./backend/drizzle:/drizzle
       - ./scripts/execute_sql_migration.sh:/execute_sql_migration.sh
-      - ./dev-creds:/vault/secrects/db-creds
     ports:
       - "127.0.0.1:5432:5432"
     networks:
       - rem-net
     restart: unless-stopped
 
-  redis-cache:
-    container_name: redis-cache
-    image: redis:7.2.3-alpine
-    restart: always
-    ports:
-      - "6379:6379"
-    command: redis-server --save 20 1 --loglevel warning --requirepass devpw
-    volumes:
-      - cache:/data
-
-      # Running the frontend here doesn't work yet
-      #   frontend:
-      #     build:
-      #       context: .
-      #       dockerfile: ./frontend/Dockerfile
-      #       args:
-      #         NEXT_PUBLIC_BACKEND_HOST: ${NEXT_PUBLIC_BACKEND_HOST}
-      #         NEXT_PUBLIC_BACKEND_PORT: ${NEXT_PUBLIC_BACKEND_PORT}
-      #         NEXT_PUBLIC_APP_ENV: ${NEXT_PUBLIC_APP_ENV}
-      #     environment:
-      #       APP_ENV: ${APP_ENV}
-      #       NODE_ENV: ${NODE_ENV}
-      #       PORT: ${NEXT_PORT}
-      #     ports:
-      #       - "127.0.0.1:3030:3030"
-      #     networks:
-      #       - rem-net
-      #     depends_on:
-      #       - rembackend
+      #  redis-cache:
+      #    container_name: redis-cache
+      #    image: redis:7.2.3-alpine
+      #    restart: always
+      #    ports:
+      #      - "6379:6379"
+      #    command: redis-server --save 20 1 --loglevel warning --requirepass devpw
+      #    volumes:
+      #      - cache:/data
 
 networks:
   rem-net:

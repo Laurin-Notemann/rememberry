@@ -19,7 +19,8 @@ const EnvZod = z.object({
   REDIS_PORT: z.number(),
   REDIS_HOST: z.string(),
   REDIS_PASSWORD: z.string(),
-  WEB_PAGE_DOMAIN: z.string(),
+  FRONTEND_HOST: z.string(),
+  FRONTEND_PORT: z.number(),
 });
 
 function getEnvSrc() {
@@ -42,6 +43,7 @@ function getEnvSrc() {
 function parseEnv(env: { [key: string]: string }) {
   return {
     ...env,
+    FRONTEND_PORT: parseInt(env.PORT),
     REDIS_PORT: parseInt(env.REDIS_PORT),
     POSTGRES_PORT: parseInt(env.POSTGRES_PORT),
     BACKEND_PORT: parseInt(env.BACKEND_PORT),
@@ -57,7 +59,7 @@ function validateEnv(env: { [key: string]: any }) {
   if (!parsedEnv.success)
     throw new Error(
       "Failed to Parse Environment Variables: " +
-        JSON.stringify(parsedEnv.error.issues, null, 2),
+      JSON.stringify(parsedEnv.error.issues, null, 2),
     );
 
   return parsedEnv.data;

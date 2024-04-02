@@ -6,16 +6,12 @@ import { db } from "./db/db";
 import { env } from "./env";
 import { ScopedLogger } from "./logger";
 import { appRouter } from "./routers/_app";
+import { getFrontendUrl } from "./utils";
 
 const server = createHTTPServer({
   middleware: cors({
     origin: [
-      env.get("WEB_PAGE_DOMAIN"),
-      // TODO: un-hardcode these
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
-      "https://rememberry.app",
-      "https://web.stage.rememberry.app",
+      getFrontendUrl()
     ],
     credentials: true,
   }),
