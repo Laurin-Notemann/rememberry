@@ -59,7 +59,7 @@ function validateEnv(env: { [key: string]: any }) {
   if (!parsedEnv.success)
     throw new Error(
       "Failed to Parse Environment Variables: " +
-      JSON.stringify(parsedEnv.error.issues, null, 2),
+        JSON.stringify(parsedEnv.error.issues, null, 2),
     );
 
   return parsedEnv.data;

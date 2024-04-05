@@ -90,8 +90,6 @@ export const catchDrizzleErrorManyEntries = async <T extends any[]>(
 };
 
 export const getFrontendUrl = () => {
-  if (env.get("IS_PROD"))
-    return `https://${env.get("FRONTEND_HOST")}`
-  else
-    return `http://${env.get("FRONTEND_HOST")}:${env.get("FRONTEND_PORT")}`
-}
+  if (env.get("IS_PROD")) return `https://${env.get("FRONTEND_HOST")}`;
+  else return `http://${env.get("FRONTEND_HOST")}:${env.get("FRONTEND_PORT")}`;
+};

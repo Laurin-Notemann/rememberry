@@ -10,9 +10,7 @@ import { getFrontendUrl } from "./utils";
 
 const server = createHTTPServer({
   middleware: cors({
-    origin: [
-      getFrontendUrl()
-    ],
+    origin: [getFrontendUrl()],
     credentials: true,
   }),
   router: appRouter,

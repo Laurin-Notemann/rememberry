@@ -32,7 +32,5 @@ const getHost = () => {
   if (env.IS_DEV)
     // TODO: un-hardcode these
     return `http://${env.FRONTEND_HOST}:${env.FRONTEND_PORT}`;
-  else
-    return `https://${env.FRONTEND_HOST}`;
-
+  else return `https://${env.FRONTEND_HOST}`;
 };
