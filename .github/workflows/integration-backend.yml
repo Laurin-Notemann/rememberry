@@ -7,10 +7,6 @@ on:
       - ".github/workflows/integration-backend.yml"
     branches: [master]
 
-defaults:
-  run:
-    working-directory: backend
-
 jobs:
   lint-format: 
     name: lint and format
