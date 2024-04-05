@@ -11,53 +11,56 @@ on:
 
 jobs:
   lint-format:
-    name: run linter and formatter
+    name: lint and format
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-        name: checkout frontend
-      - uses: actions/setup-node@v4
-        name: get nodejs
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: get pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: use node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
-        name: install dependecies
-        working-directory: frontend
-      - run: npm run lint
-        name: linter
-        working-directory: frontend
-      - run: |
-          if ! npx prettier --check .; then
-            echo "Please format the code by running: npm run format"
+          cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm i --frozen-lockfile 
+      - name: lint
+        run: pnpm run frontend lint
+      - name: check formatting
+        run: |
+          if ! pnpm run format-check; then
+            echo "Please format the code by running: pnpm run format"
             exit 1
           fi
-        name: check formatting
-        working-directory: frontend
 
   test:
-    name: run tests
+    name: test frontend
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-        name: checkout frontend
-      - uses: actions/setup-node@v4
-        name: get nodejs
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: get pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: use node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
-        name: install dependecies
-        working-directory: frontend
-      - run: npm run test
-        working-directory: frontend
-        name: run tests
+          cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm i --frozen-lockfile 
+      - name: test
+        run: pnpm run frontend test
 
   build-image:
     runs-on: ubuntu-22.04
     needs: [lint-format, test]
     name: build & push docker image
       # if: github.ref == 'refs/heads/master'
-    # Current Solution is to directly pass in the pararmeter for the host and port 
-    # so there is no build time error should be fixed at some time
     steps:
       - uses: actions/checkout@v4
         name: checkout frontend and backend
@@ -93,6 +96,8 @@ jobs:
             "NEXT_PUBLIC_APP_ENV=staging"
             "NEXT_PUBLIC_BACKEND_PORT=3050"
             "APP_ENV=staging"
+            "FRONTEND_HOST=web.stage.rememberry.app"
+            "PORT=3000"
 
 
 

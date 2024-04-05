@@ -11,59 +11,59 @@ on:
       - master
 
 jobs:
-  test:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v4
-        name: checkout backend
-        with:
-          sparse-checkout: |
-            ./backend
-      - uses: oven-sh/setup-bun@v1
-        name: get bun
-        with:
-          bun-version: 1.0.35
-      - run: bun install --frozen-lockfile
-        name: install dependecies
-        working-directory: backend
-      - run: bun run test
-        name: test with bun
-        working-directory: backend
-
   lint-format: 
-    name: lint and format backend
-    runs-on: ubuntu-22.04
+    name: lint and format
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-        name: checkout backend
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: get pnpm
+        uses: pnpm/action-setup@v3
         with:
-          sparse-checkout: |
-            ./backend
-      - uses: oven-sh/setup-bun@v1
-        name: get bun
+          version: 8
+      - name: get node
+        uses: actions/setup-node@v4
         with:
-          bun-version: 1.0.35
-      - run: bun install --frozen-lockfile
-        name: install dependecies
-        working-directory: backend
-      - run: |
-          if ! bunx prettier --check .; then
-            echo "Please format the code by running: bun run format"
+          node-version: 20
+          cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm --filter=backend -config.-dedupe-peer-dependents=false i --frozen-lockfile 
+      - name: lint
+        run: pnpm run backend lint
+      - name: check formatting
+        run: |
+          if ! pnpm run format-check ; then
+            echo "Please format the code by running: pnpm run format"
             exit 1
           fi
-        name: check code formatting
-        working-directory: backend
+
+  test:
+    name: test 
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: get pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: get node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm --filter=backend -config.-dedupe-peer-dependents=false i --frozen-lockfile 
+      - name: test 
+        run: pnpm run backend test
 
   build-image:
     runs-on: ubuntu-22.04
     needs: [lint-format, test]
     name: build & push docker image
     steps:
-      - uses: actions/checkout@v4
-        name: checkout backend
-        with:
-          sparse-checkout: |
-            ./backend
+      - name: checkout code
+        uses: actions/checkout@v4
       - name: set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: set up docker buildx
@@ -84,7 +84,8 @@ jobs:
       - name: build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
+          context: .
+          file: ./backend/Dockerfile
           platforms: linux/amd64
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
