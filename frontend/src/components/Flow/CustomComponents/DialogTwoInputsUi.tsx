@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@frontend/components/ui/button";
+import { Dialog, DialogContent } from "@frontend/components/ui/dialog";
 import React, { useRef } from "react";
 import useAutosizeTextArea from "../hooks/useAutosizeTextArea";
 import { FlowTextArea } from "./flowTextArea";

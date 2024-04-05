@@ -1,4 +1,4 @@
-import { MapDeleteInput } from "@/lib/services/maps/map.types";
+import { MapDeleteInput } from "@frontend/lib/services/maps/map.types";
 import { MoveDiagonal, PenLine, X } from "lucide-react";
 import Link from "next/link";
 import React from "react";

@@ -1,5 +1,5 @@
 // root page
-import { Button } from "@/components/ui/button";
+import { Button } from "@frontend/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 

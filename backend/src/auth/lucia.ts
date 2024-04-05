@@ -6,18 +6,6 @@ import * as schema from "../db/schema";
 import { session, users } from "../db/schema";
 import { env } from "../env";
 
-const adapter = new DrizzlePostgreSQLAdapter(db.drizzle, session, users);
-
-export const getDomain = () => {
-  if (env.get("NODE_ENV") === "staging") {
-    return "stage.rememberry.app";
-  } else if (env.get("NODE_ENV") === "production") {
-    return "rememberry.app";
-  } else {
-    return "127.0.0.1";
-  }
-};
-
 export class LuciaAuth {
   lucia: Lucia<Record<never, never>, { username: string; email: string }>;
   constructor(drizzle: NodePgDatabase<typeof schema>) {
@@ -36,7 +24,9 @@ export class LuciaAuth {
         attributes: {
           secure: true,
           sameSite: "strict",
-          domain: getDomain(),
+          domain: env.get("IS_STAGING")
+            ? env.get("FRONTEND_HOST").split("eb.")[1]
+            : env.get("FRONTEND_HOST"),
         },
       },
     });
@@ -58,7 +48,9 @@ export class LuciaAuth {
         attributes: {
           secure: true,
           sameSite: "strict",
-          domain: getDomain(),
+          domain: env.get("IS_STAGING")
+            ? env.get("FRONTEND_HOST").split("eb.")[1]
+            : env.get("FRONTEND_HOST"),
         },
       },
     });

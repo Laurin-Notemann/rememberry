@@ -38,14 +38,15 @@ class UserModelDrizzle implements UserModel {
               "Username already used",
               "CONFLICT",
             );
-          } else if (e.detail?.includes("email")) {
-            return getTRPCError(this.logger, "Email already used", "CONFLICT");
-          } else {
-            return getTRPCError(
-              this.logger,
-              "Somethings wrong with the db: " + JSON.stringify(e),
-            );
           }
+          if (e.detail?.includes("email")) {
+            return getTRPCError(this.logger, "Email already used", "CONFLICT");
+          }
+
+          return getTRPCError(
+            this.logger,
+            "Somethings wrong with the db: " + JSON.stringify(e),
+          );
         }
       }
       return getTRPCError(this.logger, JSON.stringify(e));

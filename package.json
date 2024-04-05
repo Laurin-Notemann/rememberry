@@ -1,0 +1,32 @@
+{
+  "name": "rememberry",
+  "vesrion": "0.1.0",
+  "description": "Flashcard app",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": "20"
+  },
+  "packageManager": "pnpm@8.15.5",
+  "scripts": {
+    "backend": "pnpm --filter backend",
+    "frontend": "pnpm --filter frontend",
+    "format": "biome format . --write",
+    "format-check": "biome format .",
+    "docker-build-all": "pnpm run docker-db-init && docker compose up -d --build",
+    "docker-delete-all": "docker compose down",
+    "docker-db-init": "./scripts/start_docker_environment",
+    "docker-db-reset": "docker compose down postgres_database && bun run docker-db-init",
+    "docker-backend-build": "docker compose up -d --build backend",
+    "docker-frontend-build": "docker compose up -d --build frontend",
+    "check-ci": "pnpm run format && pnpm run backend lint && pnpm run frontend lint"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "7.6.0",
+    "@biomejs/biome": "1.6.3",
+    "@tanstack/eslint-plugin-query": "4.38.0",
+    "@types/node": "20.5.9",
+    "@typescript-eslint/parser": "7.6.0",
+    "eslint": "8.56.0"
+  }
+}

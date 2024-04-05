@@ -1,17 +1,18 @@
 "use client";
-import FlowBackground from "@/components/Flow/Background/flowBackground"; // Adjust the import based on the actual path
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import FormElement from "@/components/ui/formElement";
+import FlowBackground from "@frontend/components/Flow/Background/flowBackground"; // Adjust the import based on the actual path
+import { Button } from "@frontend/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@frontend/components/ui/card";
+import FormElement from "@frontend/components/ui/formElement";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
-import useLoginUser, {
-  LoginUserInput,
-} from "../../lib/services/authentication/useLoginUser";
-import useRegisterUser, {
-  RegisterUserInput,
-} from "../../lib/services/authentication/useRegisterUser";
+import useLoginUser from "../../lib/services/authentication/useLoginUser";
+import useRegisterUser from "../../lib/services/authentication/useRegisterUser";
 
 export default function Login() {
   const register = useRegisterUser();
@@ -46,12 +47,7 @@ export default function Login() {
                   password: "",
                 }}
                 onSubmit={async (values, { setFieldError }) => {
-                  const user: LoginUserInput = {
-                    email: values.email,
-                    password: values.password,
-                  };
-
-                  const [error, _res] = await login({ user });
+                  const [error, _res] = await login({ user: values });
                   if (error) {
                     setFieldError("email", error);
                   } else {
@@ -105,13 +101,7 @@ export default function Login() {
                     return;
                   }
 
-                  const user: RegisterUserInput = {
-                    username: values.username,
-                    email: values.email,
-                    password: values.password,
-                  };
-
-                  const [error, _res] = await register({ user });
+                  const [error, _res] = await register({ user: values });
                   if (error) {
                     setFieldError("email", error);
                   } else {

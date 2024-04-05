@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@frontend/components/ui/button";
 import { Maximize2 } from "lucide-react";
 
 export const OpenModalButton = () => {

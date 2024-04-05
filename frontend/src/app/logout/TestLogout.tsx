@@ -5,9 +5,7 @@ import useLogoutUser from "../../lib/services/authentication/useLogoutUser";
 export default function TestLogout() {
   const router = useRouter();
   const logout = useLogoutUser();
-  async function onClickLogout(event: any) {
-    event.preventDefault();
-
+  async function onClickLogout() {
     const [error, _success] = await logout();
 
     if (error) return;

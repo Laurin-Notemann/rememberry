@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { Button } from "@frontend/components/ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 interface SidebarButtonProps {

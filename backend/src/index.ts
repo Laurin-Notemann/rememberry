@@ -6,15 +6,11 @@ import { db } from "./db/db";
 import { env } from "./env";
 import { ScopedLogger } from "./logger";
 import { appRouter } from "./routers/_app";
+import { getFrontendUrl } from "./utils";
 
 const server = createHTTPServer({
   middleware: cors({
-    origin: [
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
-      "https://rememberry.app",
-      "https://web.stage.rememberry.app",
-    ],
+    origin: [getFrontendUrl()],
     credentials: true,
   }),
   router: appRouter,
@@ -30,7 +26,8 @@ process.on("SIGHUP", async () => {
   env.updateEnv();
   let attempts = 0;
   const maxAttempts = 5;
-  let drizzle;
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  let drizzle: any;
 
   while (!drizzle && attempts < maxAttempts) {
     drizzle = await db.updateDBConnection();
@@ -50,6 +47,6 @@ process.on("SIGHUP", async () => {
   lucia.updateLucia(drizzle);
 });
 
-server.listen(env.get("PORT"));
+server.listen(env.get("BACKEND_PORT"));
 
-console.log("server listening on http://localhost:" + env.get("PORT"));
+console.log("server listening on http://localhost:" + env.get("BACKEND_PORT"));

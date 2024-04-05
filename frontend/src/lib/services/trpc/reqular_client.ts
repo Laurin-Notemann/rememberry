@@ -1,4 +1,4 @@
-import { env } from "@/lib/env";
+import { env } from "@frontend/lib/env";
 import { AppRouter } from "@backend/routers/_app";
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 import superjson from "superjson";

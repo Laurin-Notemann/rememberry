@@ -1,4 +1,4 @@
-import { backendHookWrapper } from "@/lib/utils";
+import { backendHookWrapper } from "@frontend/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import { NodeDeleteInput } from "./node.types";

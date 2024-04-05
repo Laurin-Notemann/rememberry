@@ -1,21 +1,21 @@
 "use client";
-import FlowBackground from "@/components/Flow/Background/flowBackground";
-import NodeEdge from "@/components/Flow/CardComponents/NodeEdge";
-import NodeWithState from "@/components/Flow/CardComponents/NodewithState";
-import { DialogTwoInputs } from "@/components/Flow/CustomComponents/DialogTwoInputs";
-import FlowFooter from "@/components/Flow/CustomComponents/flowFooter";
-import { FlowHeader } from "@/components/Flow/Header/FlowHeader";
-import { Button } from "@/components/ui/button";
-import useGetMapByUserId from "@/lib/services/maps/useGetMapsByUserId";
-import { NodeData } from "@/lib/services/node/node.types";
-import useNodeCreate from "@/lib/services/node/useCreateNode";
-import useNodeDelete from "@/lib/services/node/useDeleteNode";
-import useGetNodesByMapId from "@/lib/services/node/useGetNodesByMapId";
-import useNodeUpdate from "@/lib/services/node/useUpdateNode";
+import FlowBackground from "@frontend/components/Flow/Background/flowBackground";
+import NodeEdge from "@frontend/components/Flow/CardComponents/NodeEdge";
+import NodeWithState from "@frontend/components/Flow/CardComponents/NodewithState";
+import { DialogTwoInputs } from "@frontend/components/Flow/CustomComponents/DialogTwoInputs";
+import FlowFooter from "@frontend/components/Flow/CustomComponents/flowFooter";
+import { FlowHeader } from "@frontend/components/Flow/Header/FlowHeader";
+import { Button } from "@frontend/components/ui/button";
+import useGetMapByUserId from "@frontend/lib/services/maps/useGetMapsByUserId";
+import { NodeData } from "@frontend/lib/services/node/node.types";
+import useNodeCreate from "@frontend/lib/services/node/useCreateNode";
+import useNodeDelete from "@frontend/lib/services/node/useDeleteNode";
+import useGetNodesByMapId from "@frontend/lib/services/node/useGetNodesByMapId";
+import useNodeUpdate from "@frontend/lib/services/node/useUpdateNode";
 import {
   databaseNodeToStoreNode,
   storeNodeToDatabaseNode,
-} from "@/lib/services/node/utils";
+} from "@frontend/lib/services/node/utils";
 import { nanoid } from "nanoid/non-secure";
 import { useCallback, useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -55,13 +55,17 @@ type MapProps = {
 function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState<NodeData>(nodesProp);
   const [edges, setEdges, onEdgesChange] = useEdgesState(edgesProp);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  /** this is defined when the user is creating a new node */
   const [parentNodeId, setParentNodeId] = useState<string | null>(null);
+  /** the node that is currently being created */
   const [connectingNodeId, setConnectingNodeId] = useState<string | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [isCreateNode, setCreateNode] = useState(false);
-  const [xPosition, setXPosition] = useState(500);
-  const [yPosition, setYPosition] = useState(500);
+  const [isNodeEditDialogOpen, setIsNodeEditDialogOpen] = useState(false);
+  /** if the "create or edit node" dialog is open, whether it's creating a new node or editing an existing one */
+  const [isCreateNode, setIsCreateNode] = useState(false);
+
+  const [newNodePosition, setNewNodePosition] = useState({ x: 500, y: 500 });
+
   const [nodeIdToEdit, setNodeIdToEdit] = useState<string | null>(null);
   const [placeholderTopInput, setPlaceholderTopInput] = useState("");
   const [placeholderBottomInput, setPlaceholderBottomInput] = useState("");
@@ -75,12 +79,12 @@ function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
 
   useEffect(() => {
     if (nodesProp.length === 0) {
-      setDialogOpen(true);
-      setCreateNode(true);
+      setIsNodeEditDialogOpen(true);
+      setIsCreateNode(true);
     } else {
       if (!nodeIdToEdit) {
-        setDialogOpen(false);
-        setCreateNode(false);
+        setIsNodeEditDialogOpen(false);
+        setIsCreateNode(false);
       }
     }
     setNodes(nodesProp);
@@ -93,12 +97,12 @@ function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
   };
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   const closeDialog = () => {
-    setDialogOpen(false);
-    setCreateNode(false);
+    setIsNodeEditDialogOpen(false);
+    setIsCreateNode(false);
     setNodeIdToEdit(null);
   };
 
@@ -158,10 +162,9 @@ function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
 
         if (parentNode && childNodePosition) {
           setParentNodeId(parentNode.id);
-          setXPosition(childNodePosition.x);
-          setYPosition(childNodePosition.y);
-          setDialogOpen(true);
-          setCreateNode(true);
+          setNewNodePosition(childNodePosition);
+          setIsNodeEditDialogOpen(true);
+          setIsCreateNode(true);
           setPlaceholderTopInput("");
           setPlaceholderBottomInput("");
         }
@@ -171,8 +174,8 @@ function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
   );
 
   const openDialogEditNode = (nodeId: string) => {
-    setDialogOpen(true);
-    setCreateNode(false);
+    setIsNodeEditDialogOpen(true);
+    setIsCreateNode(false);
     setNodeIdToEdit(nodeId);
     const node = nodes.find((n) => n.id === nodeId);
     if (node) {
@@ -186,23 +189,25 @@ function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
 
   const openDialogAddNode = () => {
     const topLevelNode = nodes.find((n) => n.data.parentNodeId === null);
-    setDialogOpen(true);
-    setCreateNode(true);
-    setXPosition(topLevelNode ? topLevelNode.position.x + 350 : 500);
-    setYPosition(topLevelNode?.position.y || 500);
+    setIsNodeEditDialogOpen(true);
+    setIsCreateNode(true);
+    setNewNodePosition({
+      x: topLevelNode ? topLevelNode.position.x + 350 : 500,
+      y: topLevelNode?.position.y || 500,
+    });
     setParentNodeId(null);
     setPlaceholderTopInput("");
     setPlaceholderBottomInput("");
   };
 
-  const handleDialogSubmit = async (front: string, back: string) => {
+  const onCreateOrEditNode = async (front: string, back: string) => {
     if (isCreateNode) {
       await createNode({
         mapId: mapId,
         frontside: front,
         backside: back,
-        xPosition,
-        yPosition,
+        xPosition: newNodePosition.x,
+        yPosition: newNodePosition.y,
         nodeType: "flashcard",
         parentNodeId: parentNodeId ? parentNodeId : undefined,
       });
@@ -230,6 +235,7 @@ function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
   //console.log("id", mapId, "name", mapName, "nodes", nodes, "edges", edges);
 
   const nodesWithHandlers = nodes.map((node) => {
+    // nodes could just access these using a store
     node.data.editNode = openDialogEditNode;
     node.data.deleteNode = deleteNode;
     return node;
@@ -242,21 +248,21 @@ function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
     >
       <FlowHeader
         mapName={mapName}
-        openHandler={() => setIsOpen(!isOpen)}
-        isOpen={isOpen}
+        openHandler={() => setIsSidebarOpen(!isSidebarOpen)}
+        isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
       />
 
       <Toaster position="bottom-center" reverseOrder={false} />
 
-      {dialogOpen && (
+      {isNodeEditDialogOpen && (
         <DialogTwoInputs
           topInput={placeholderTopInput}
           bottomInput={placeholderBottomInput}
           placeholderTopInput={"Frontside"}
           placeholderBottomInput={"Backside"}
-          isDialogOpen={dialogOpen}
-          onSubmit={handleDialogSubmit}
+          isDialogOpen={isNodeEditDialogOpen}
+          onSubmit={onCreateOrEditNode}
           closeDialog={closeDialog}
           classNameInputFields={""}
         />

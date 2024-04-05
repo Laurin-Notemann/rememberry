@@ -7,65 +7,74 @@ on:
       - ".github/workflows/integration-backend.yml"
     branches: [master]
 
-defaults:
-  run:
-    working-directory: backend
-
 jobs:
-  test:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v4
-        name: Checkout backend
-        with:
-          sparse-checkout: |
-            ./backend
-      - uses: oven-sh/setup-bun@v1
-        name: Get bun
-        with:
-          bun-version: 1.0.35
-      - run: bun install --frozen-lockfile
-        name: Install dependecies
-      - run: bun run test
-        name: test with bun
-
   lint-format: 
-    name: lint and format backend
+    name: lint and format
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-        name: Checkout backend
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: get pnpm
+        uses: pnpm/action-setup@v3
         with:
-          sparse-checkout: |
-            ./backend
-      - uses: oven-sh/setup-bun@v1
-        name: Get bun
+          version: 8
+      - name: get node
+        uses: actions/setup-node@v4
         with:
-          bun-version: 1.0.35
-      - run: bun install --frozen-lockfile
-        name: Install dependecies
-      - run: |
-          if ! bunx prettier --check .; then
-            echo "Please format the code by running: bun run format"
+          node-version: 20
+          cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm --filter=backend -config.-dedupe-peer-dependents=false i --frozen-lockfile 
+      - name: lint
+        run: pnpm run backend lint
+      - name: check formatting
+        run: |
+          if ! pnpm run format-check ; then
+            echo "Please format the code by running: pnpm run format"
             exit 1
           fi
-        name: Check code formatting
 
-  test-build:
-    name: build to check compilation
+  test:
+    name: test 
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-        name: Checkout backend
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: get pnpm
+        uses: pnpm/action-setup@v3
         with:
-          sparse-checkout: |
-            ./backend
-      - uses: oven-sh/setup-bun@v1
-        name: Get bun
+          version: 8
+      - name: get node
+        uses: actions/setup-node@v4
         with:
-          bun-version: 1.0.35
-      - run: bun install --frozen-lockfile
-        name: Install dependecies
-      - run: bun run build
-        name: build the project with bun
+          node-version: 20
+          cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm --filter=backend -config.-dedupe-peer-dependents=false i --frozen-lockfile 
+      - name: test 
+        run: pnpm run backend test
+
+  build:
+    name: build
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: get pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: get node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm --filter=backend -config.-dedupe-peer-dependents=false i --frozen-lockfile 
+      - name: get bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.1.0
+      - name: build
+        run: pnpm run backend build
 

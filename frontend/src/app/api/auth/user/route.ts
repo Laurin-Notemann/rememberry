@@ -1,5 +1,5 @@
-import { env } from "@/lib/env";
-import { AppRouter } from "@backend/routers/_app";
+import { env } from "@frontend/lib/env";
+import { AppRouter } from "backend/src/routers/_app";
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 import { NextRequest } from "next/server";
 import superjson from "superjson";
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json({ status: "successful", user: user }, { status: 200 });
   } catch (e) {
-    console.error(e);
+    console.error("GET user BY SESSION", e);
     return Response.json(
       { status: "error", message: "Could not fetch user" },
       { status: 400 },
@@ -31,6 +31,11 @@ export async function GET(req: NextRequest) {
 
 function getTrpcClient(session: string) {
   const getBackendUrll = () => {
+    if (env.DOCKER_BACKEND_HOST) {
+      return (
+        "http://" + env.DOCKER_BACKEND_HOST + ":" + env.NEXT_PUBLIC_BACKEND_PORT
+      );
+    }
     if (env.NEXT_PUBLIC_IS_DEV) {
       return (
         "http://" +

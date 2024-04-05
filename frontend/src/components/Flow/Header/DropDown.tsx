@@ -6,7 +6,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@frontend/components/ui/select";
 import useDropDownFocusStore from "../stores/headerDropdownStore";
 
 export function DropDown() {

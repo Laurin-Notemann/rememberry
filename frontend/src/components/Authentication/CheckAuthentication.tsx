@@ -1,5 +1,5 @@
 "use client";
-import Loading from "@/app/loading";
+import Loading from "@frontend/app/loading";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 import {

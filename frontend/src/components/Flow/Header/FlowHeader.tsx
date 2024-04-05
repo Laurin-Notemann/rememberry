@@ -1,9 +1,9 @@
-import { DropDown } from "@/components/Flow/Header/DropDown";
-import { ModeToggle } from "@/components/ui/ModeToggle";
-import { SidebarButton } from "@/components/ui/SidebarButton";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import useGetMapByUserId from "@/lib/services/maps/useGetMapsByUserId";
+import { DropDown } from "@frontend/components/Flow/Header/DropDown";
+import { ModeToggle } from "@frontend/components/ui/ModeToggle";
+import { SidebarButton } from "@frontend/components/ui/SidebarButton";
+import { Button } from "@frontend/components/ui/button";
+import { Card } from "@frontend/components/ui/card";
+import useGetMapByUserId from "@frontend/lib/services/maps/useGetMapsByUserId";
 import Link from "next/link";
 import { Panel } from "reactflow";
 
@@ -35,7 +35,9 @@ export const FlowHeader: React.FC<HeaderProps> = ({
     <div>
       <div className="relative ">
         <div
-          className={`fixed z-10 ${isOpen ? "translate-x-0" : "-translate-x-full"} ease-in-out duration-300 flex flex-row `}
+          className={`fixed z-10 ${
+            isOpen ? "translate-x-0" : "-translate-x-full"
+          } ease-in-out duration-300 flex flex-row `}
         >
           <div className=" overflow-scroll w-56 h-screen bg-white dark:bg-dark-900 px-5 border-r-2 pt-5 dark:border-dark-300/50">
             <h1 className=" text-lg font-semibold text-center text-primary mb-4">

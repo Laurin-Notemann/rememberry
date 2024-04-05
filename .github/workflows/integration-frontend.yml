@@ -7,79 +7,75 @@ on:
       - ".github/workflows/integration-frontend.yml"
     branches: [master]
 
-defaults:
-  run:
-    working-directory: frontend
-
 jobs:
   lint-format:
-    name: run linter and formatter
+    name: lint and format
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-        name: checkout frontend
-      - uses: actions/setup-node@v4
-        name: get nodejs
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: get pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: use node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
-        name: install dependecies
-      - run: npm run lint
-        name: linter
-      - run: |
-          if ! npx prettier --check .; then
-            echo "Please format the code by running: npm run format"
+          cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm i --frozen-lockfile 
+      - name: lint
+        run: pnpm run frontend lint
+      - name: check formatting
+        run: |
+          if ! pnpm run format-check; then
+            echo "Please format the code by running: pnpm run format"
             exit 1
           fi
-        name: check formatting
 
   test:
-    name: run tests
+    name: test frontend
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-        name: checkout frontend
-      - uses: actions/setup-node@v4
-        name: get nodejs
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: get pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: use node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
-        name: install dependecies
-      - run: npm run test
-        name: run tests
+          cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm i --frozen-lockfile 
+      - name: test
+        run: pnpm run frontend test
 
-  build-compile:
-    name: build with next to check compilation
+  build:
+    name: build
     runs-on: ubuntu-22.04
-    needs: [test]
     env:
       NEXT_PUBLIC_BACKEND_HOST: "localhost"
       NEXT_PUBLIC_BACKEND_PORT: "3050"
       NEXT_PUBLIC_APP_ENV: "development"
       APP_ENV: "development"
+      FRONTEND_HOST: "127.0.0.1"
     steps:
-      - uses: actions/checkout@v4
-        name: checkout frontend
-      - uses: actions/setup-node@v4
-        name: get nodejs
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: get pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: use node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - uses: oven-sh/setup-bun@v1
-        name: get bun
-        with:
-          bun-version: 1.0.35
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.npm
-            ${{ github.workspace }}/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
-      - run: npm ci
-        name: install dependecies frontend
-      - run: bun install --frozen-lockfile
-        name: install dependecies backend
-        working-directory: backend
-      - run: npm run build
-        name: build with nextjs
+          cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm i --frozen-lockfile 
+      - name: build
+        run: pnpm run frontend build

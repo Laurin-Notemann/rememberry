@@ -1,5 +1,5 @@
-import FlowBackground from "@/components/Flow/Background/flowBackground";
-import { Button } from "@/components/ui/button";
+import FlowBackground from "@frontend/components/Flow/Background/flowBackground";
+import { Button } from "@frontend/components/ui/button";
 import Link from "next/link";
 
 export default function NotFound() {

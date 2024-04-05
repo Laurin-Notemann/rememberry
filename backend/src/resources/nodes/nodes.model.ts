@@ -146,13 +146,11 @@ class NodeModelDrizzle implements NodeModel {
 
   async updateNodeById(node: Node) {
     try {
-      this.logger.info("hallo?", node);
       const updatedNode = await this.db.drizzle
         .update(nodes)
         .set(node)
         .where(eq(nodes.id, node.id))
         .returning();
-      this.logger.info("hallo2?");
       if (!hasOnlyOneEntry(updatedNode)) return getTRPCError(this.logger);
       return [null, updatedNode[0]] as const;
     } catch (e) {

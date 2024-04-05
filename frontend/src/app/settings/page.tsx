@@ -1,8 +1,13 @@
 "use client";
-import FlowBackground from "@/components/Flow/Background/flowBackground";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import FormElement from "@/components/ui/formElement";
+import FlowBackground from "@frontend/components/Flow/Background/flowBackground";
+import { Button } from "@frontend/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@frontend/components/ui/card";
+import FormElement from "@frontend/components/ui/formElement";
 import { Form, Formik } from "formik";
 import { useState } from "react";
 import { useUserStore } from "../../lib/services/authentication/userStore";

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@frontend/components/ui/button";
 import { DeleteIcon, Maximize2 } from "lucide-react";
 import React, { useRef } from "react";
 import { Position } from "reactflow";

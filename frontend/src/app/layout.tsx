@@ -27,6 +27,7 @@ export default async function RootLayout({
   const session = cookies().get("auth_session")?.value;
 
   const user = await userLoader(session);
+
   return (
     <html lang="en">
       {/* children prop refers to the page component that the client sees atm */}

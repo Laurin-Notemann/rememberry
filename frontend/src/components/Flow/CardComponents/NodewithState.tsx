@@ -1,5 +1,5 @@
-import { Node } from "@/lib/services/node/node.types";
-import { normalizeZoom } from "@/lib/utils";
+import { Node } from "@frontend/lib/services/node/node.types";
+import { normalizeZoom } from "@frontend/lib/utils";
 import React, { memo, useState } from "react";
 import { useViewport } from "reactflow";
 import useFlashcardFocusStore from "../stores/cardFocusStore";
