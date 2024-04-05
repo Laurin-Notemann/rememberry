@@ -1,5 +1,5 @@
 {
-  "name": "@rememberry/frontend",
+  "name": "frontend",
   "version": "0.1.0",
   "description": "Frontend built with nextjs",
   "main": "./src/app/page.tsx",
@@ -7,7 +7,7 @@
   "author": "rememberry-io",
   "license": "MIT",
   "scripts": {
-    "dev": "next dev",
+    "dev": "export $(cat ../.env | egrep -v '#|^$' | xargs) && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

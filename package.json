@@ -5,19 +5,21 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": "18"
+    "node": "20"
   },
-  "workspaces": ["backend", "frontend"],
+  "packageManager": "pnpm@8.15.5",
   "scripts": {
-    "backend:build": "bun run --cwd ./backend build",
-    "backend:dev": "bun run --cwd ./backend dev",
-    "backend:migrate": "bun run --cwd ./backend migrate:generate",
-    "backend:lint": "bun run --cwd ./backend/ lint",
-    "frontend:build": "bun run --cwd ./frontend/ build",
-    "frontend:dev": "bun run --cwd ./frontend/ dev",
-    "frontend:lint": "bun run --cwd ./frontend/ lint",
+    "backend": "pnpm --filter backend",
+    "frontend": "pnpm --filter frontend",
     "format": "biome format . --write",
-    "format:check": "biome format ."
+    "format-check": "biome format .",
+    "docker-db-init": "./scripts/start_docker_environment",
+    "docker-db-reset": "docker compose down postgres_database && bun run docker-db-init",
+    "docker-backend-build": "docker compose up -d --build rembackend ",
+    "docker-backend-start": "docker compose start rembackend",
+    "docker-backend-stop": "docker compose stop rembackend",
+    "docker-backend-delete": "docker compose down rembackend",
+    "docker-delete-all": "docker compose down"
   },
   "dependencies": {
     "@tanstack/react-query": "v4.18",
