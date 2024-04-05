@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -o allexport 
+source .env set
+set +o allexport
+
+POSTGRES_DB_CONTAINER_NAME=postgres_database
+
+echo "Start $POSTGRES_DB_CONTAINER_NAME docker container:"
+docker compose up -d $POSTGRES_DB_CONTAINER_NAME
+
+sleep 2
+
+echo "Apply migration to $POSTGRES_DB_CONTAINER_NAME container..."
+
+docker exec $POSTGRES_DB_CONTAINER_NAME /bin/sh ./execute_sql_migration.sh
+
+echo "Finished migration"

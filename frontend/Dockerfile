@@ -1,56 +1,51 @@
-FROM node:20-alpine AS frontbase
-FROM oven/bun:1.0.35-alpine AS backbase
+FROM node:20-alpine AS node
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
-
-FROM frontbase AS frontdeps
+FROM node AS deps
 RUN apk add --no-cache libc6-compat
-WORKDIR /app/frontend
-COPY ./frontend/package.json ./frontend/yarn.lock* ./frontend/package-lock.json* ./frontend/pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+WORKDIR /app
+COPY package.json  pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY ./frontend/package.json ./frontend/package.json
+COPY ./backend/package.json ./backend/package.json
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store  pnpm i --frozen-lockfile
 
-FROM backbase AS backdeps
-WORKDIR /app/backend
-COPY ./backend/package.json ./backend/bun.lockb* ./
-RUN bun install --frozen-lockfile
-
-FROM backbase AS backdir
-WORKDIR /app/backend
-COPY --from=backdeps /app/backend/node_modules ./node_modules
-COPY ./backend .
-
-FROM frontbase AS frontbuilder
-WORKDIR /app/frontend
-COPY --from=frontdeps /app/frontend/node_modules ./node_modules
-COPY --from=backdir /app/backend /app/backend
-COPY ./frontend .
+FROM node AS builder
+WORKDIR /app
+COPY --from=deps /app/frontend/node_modules ./frontend/node_modules
+COPY --from=deps /app/backend/node_modules ./backend/node_modules
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/package.json ./
+COPY tsconfig.base.json ./tsconfig.base.json
+COPY .eslintrc.json ./.eslintrc.json
+COPY ./frontend ./frontend
+COPY ./backend ./backend
 
 ARG APP_ENV
+ARG FRONTEND_HOST
 ARG NEXT_PUBLIC_APP_ENV
 ARG NEXT_PUBLIC_BACKEND_HOST
 ARG NEXT_PUBLIC_BACKEND_PORT
 ENV APP_ENV ${APP_ENV}
+ENV FRONTEND_HOST ${FRONTEND_HOST}
 ENV NEXT_PUBLIC_APP_ENV ${NEXT_PUBLIC_APP_ENV}
 ENV NEXT_PUBLIC_BACKEND_HOST ${NEXT_PUBLIC_BACKEND_HOST}
 ENV NEXT_PUBLIC_BACKEND_PORT ${NEXT_PUBLIC_BACKEND_PORT}
 
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN npm run build
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm run frontend build
 
 
-FROM frontbase AS runner
+FROM node AS runner
 WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-COPY --from=frontbuilder /app/frontend/public ./public
+COPY --from=builder /app/frontend/public ./public
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
-COPY --from=frontbuilder --chown=nextjs:nodejs /app/frontend/.next/standalone ./
-COPY --from=frontbuilder --chown=nextjs:nodejs /app/frontend/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/frontend/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/frontend/.next/static ./.next/static
 USER nextjs
 CMD ["node", "server.js"]
-

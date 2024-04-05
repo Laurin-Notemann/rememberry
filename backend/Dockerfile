@@ -1,26 +1,26 @@
-FROM oven/bun:1.0.35-alpine AS base
+FROM oven/bun:1.1.0-alpine AS bun
+FROM node:20-alpine AS node
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
-FROM base AS deps
+FROM node AS deps
 WORKDIR /app
-COPY package.json yarn.lock* bun.lockb* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f bun.lockb ]; then bun install --frozen-lockfile; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY backend/package.json ./backend/package.json
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store  pnpm --filter=backend -config.-dedupe-peer-dependents=false i --frozen-lockfile
 
-
-FROM base AS builder
+FROM bun AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN bun run build
+COPY --from=deps /app/package.json .
+COPY ./backend ./backend
+RUN ls ./backend
+RUN bun build --target=node --outdir=./dist ./backend/src/index.ts
 
 
-FROM base AS runner
+FROM node AS runner
 WORKDIR /app
-COPY --from=builder /app/dist ./dist
-CMD ["bun", "./dist/index.js"]
-
+COPY --from=builder /app/backend/dist ./dist
+COPY --from=builder /app/backend/package.json ./dist
+CMD ["node", "./dist/index.js"]
