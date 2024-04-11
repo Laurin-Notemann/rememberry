@@ -1,5 +1,4 @@
 "use client";
-import FlowBackground from "@frontend/components/Flow/Background/flowBackground"; // Adjust the import based on the actual path
 import { Button } from "@frontend/components/ui/button";
 import {
   Card,
@@ -20,9 +19,6 @@ export default function Login() {
   const router = useRouter();
 
   return (
-    <div className="relative">
-      <FlowBackground />
-
       <div className="z-10 absolute top-0 left-0 w-full h-full flex items-center justify-center">
         <div className="z-10 relative flex flex-col items-center justify-center min-h-screen">
           <Tabs.Root defaultValue="login" className="w-[400px] h-[480px] ">
@@ -161,6 +157,5 @@ export default function Login() {
           </Tabs.Root>
         </div>
       </div>
-    </div>
   );
 }

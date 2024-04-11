@@ -1,6 +1,5 @@
 // root page
 "use client";
-import FlowBackground from "@frontend/components/Flow/Background/flowBackground";
 import MapCard from "@frontend/components/Flow/CardComponents/MapCard";
 import { DialogTwoInputs } from "@frontend/components/Flow/CustomComponents/DialogTwoInputs";
 import FlowFooter from "@frontend/components/Flow/CustomComponents/flowFooter";
@@ -77,7 +76,6 @@ function MapMenu() {
   return (
     <div className="relative w-full h-full">
       <div className="fixed">
-        <FlowBackground />
       </div>
       <div className="z-10 absolute top-0 left-0 h-screen">
         {dialogOpen && (

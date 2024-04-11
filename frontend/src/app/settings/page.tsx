@@ -1,5 +1,4 @@
 "use client";
-import FlowBackground from "@frontend/components/Flow/Background/flowBackground";
 import { Button } from "@frontend/components/ui/button";
 import {
   Card,
@@ -31,8 +30,6 @@ export default function Settings() {
 
   return (
     <div className="relative">
-      <FlowBackground />
-
       <div className="z-10 absolute top-0 left-0 w-full h-full flex items-center justify-center">
         <div className="z-10 relative flex flex-col items-center justify-center min-h-screen">
           <div className="w-[400px] h-[480px]">
