@@ -75,7 +75,9 @@ function MapMenu() {
 
   return (
     <div className="relative w-full h-full">
-      <div className="fixed"></div>
+      <h1 className="flex flex-col justify-center items-center mt-16 text-2xl text-primary font-medium">
+        Which map do you want to learn today?
+      </h1>
       <div className="z-10 absolute top-0 left-0 h-screen">
         {dialogOpen && (
           <DialogTwoInputs
@@ -89,12 +91,6 @@ function MapMenu() {
             classNameInputFields={""}
           />
         )}
-        <div
-          id="header"
-          className="flex flex-col justify-center items-center mt-16 text-2xl text-primary font-medium"
-        >
-          <h1 className="">Which map do you want to learn today?</h1>
-        </div>
         <div id="body" className="flex content-start p-20 flex-wrap">
           {mapsSortedByDescendingCreatedDate.map(
             (map: { id: string; name: string; description: string }) => (
