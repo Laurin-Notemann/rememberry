@@ -75,8 +75,7 @@ function MapMenu() {
 
   return (
     <div className="relative w-full h-full">
-      <div className="fixed">
-      </div>
+      <div className="fixed"></div>
       <div className="z-10 absolute top-0 left-0 h-screen">
         {dialogOpen && (
           <DialogTwoInputs
