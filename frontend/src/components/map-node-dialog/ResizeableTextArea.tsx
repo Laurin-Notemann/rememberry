@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
-interface FlowTextAreaProps {
+type ResizeableTextAreaProps = {
   className: string;
   value: string;
   textAreaRef: React.RefObject<HTMLTextAreaElement>;
@@ -11,7 +11,7 @@ interface FlowTextAreaProps {
   changes: (value: string) => void;
 }
 
-export const FlowTextArea: React.FC<FlowTextAreaProps> = ({
+export const ResizeableTextArea: FC<ResizeableTextAreaProps> = ({
   className,
   value,
   textAreaRef,

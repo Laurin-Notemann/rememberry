@@ -1,18 +1,18 @@
 "use client";
 import Loading from "@frontend/app/loading";
 import { useRouter } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import {
   User,
   useUserStore,
 } from "../../lib/services/authentication/userStore";
 
-interface FetchUserProps {
+type FetchUserProps = {
   user: User | null;
   children: ReactNode;
 }
 
-export default function FetchUser({ user, children }: FetchUserProps) {
+export const FetchUser: FC<FetchUserProps> = ({ user, children }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 

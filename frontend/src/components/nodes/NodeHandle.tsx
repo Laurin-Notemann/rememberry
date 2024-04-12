@@ -1,6 +1,11 @@
+import { FC } from "react";
 import { Handle, Position } from "reactflow";
 
-export const CustomHandle = ({ position }: { position: Position }) => {
+type NodeHandleProps = {
+  position: Position
+}
+
+export const NodeHandle: FC<NodeHandleProps> = ({ position }) => {
   const handleStyle = {
     // classNames: "dark:bg-colors-dark-500",
     placeSelf: "center",

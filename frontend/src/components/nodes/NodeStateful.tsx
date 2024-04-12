@@ -1,14 +1,14 @@
 import { Node } from "@frontend/lib/services/node/node.types";
 import { normalizeZoom } from "@frontend/lib/utils";
-import React, { memo, useState } from "react";
+import React, { FC, memo, useState } from "react";
 import { useViewport } from "reactflow";
-import useFlashcardFocusStore from "../stores/cardFocusStore";
+import useFlashcardFocusStore from "../../lib/services/stores/cardFocusStore";
 import { NodeUI } from "./NodeUI";
-import { ColorType, TrafficColor } from "./TrafficLights";
+import { ColorType, TrafficColor } from "./RatingTrafficLights";
 
 type NodeWithStateProps = Omit<Node, "position">;
 
-export const NodeWithState: React.FC<NodeWithStateProps> = ({ data, id }) => {
+export const NodeWithState: FC<NodeWithStateProps> = ({ data, id }) => {
   const [isFront, setIsFront] = useState(true);
 
   const [selectedColor, setSelectedColor] = useState<
@@ -76,4 +76,4 @@ export const NodeWithState: React.FC<NodeWithStateProps> = ({ data, id }) => {
   );
 };
 
-export default memo(NodeWithState);
+export const NodeMemo = memo(NodeWithState);

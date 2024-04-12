@@ -2,12 +2,12 @@ import { Button } from "@frontend/components/ui/button";
 import { DeleteIcon, Maximize2 } from "lucide-react";
 import React, { useRef } from "react";
 import { Position } from "reactflow";
-import { FlowTextArea } from "../CustomComponents/flowTextArea";
-import useAutosizeTextArea from "../hooks/useAutosizeTextArea";
-import { CustomHandle } from "./CustomHandle";
-import { ColorType, TrafficLights } from "./TrafficLights";
+import { ResizeableTextArea } from "../map-node-dialog/ResizeableTextArea";
+import { useAutosizeTextArea } from "../map-node-dialog/useAutosizeTextArea";
+import { NodeHandle } from "./NodeHandle";
+import { ColorType, RatingTrafficLights } from "./RatingTrafficLights";
 
-interface NodeUIProps {
+type NodeUIProps = {
   isFront: boolean;
   frontside: string;
   backside: string;
@@ -65,14 +65,14 @@ export const NodeUI: React.FC<NodeUIProps> = ({
     >
       <div onClick={toggleCard} className={`p-2  rounded-lg ${borderClasses}`}>
         <div>
-          <FlowTextArea
+          <ResizeableTextArea
             className={`${colorType}`}
             value={isFront ? frontside : backside}
             textAreaRef={isFront ? frontsideAreaRef : backsideAreaRef}
             placeholder={""}
-            changes={function (): void {}}
+            changes={function (): void { }}
             isInput={false}
-            onSubmit={function (): void {}}
+            onSubmit={function (): void { }}
             isFocussed={false}
           />
         </div>
@@ -89,7 +89,7 @@ export const NodeUI: React.FC<NodeUIProps> = ({
           <div className="flex relative flex-row align-middle ml-2">
             {nodeType === "flashcard" && (
               <div className=" pr-2 mt-1">
-                <TrafficLights onColorChange={handleColorChange} />
+                <RatingTrafficLights onColorChange={handleColorChange} />
               </div>
             )}
             <div className="flex flex-col gap-3 items-center justify-center ">
@@ -114,8 +114,8 @@ export const NodeUI: React.FC<NodeUIProps> = ({
         </div>
       )}
 
-      <CustomHandle position={Position.Top} />
-      <CustomHandle position={Position.Bottom} />
+      <NodeHandle position={Position.Top} />
+      <NodeHandle position={Position.Bottom} />
     </div>
   );
 };

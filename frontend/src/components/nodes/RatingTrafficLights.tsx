@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { FC } from "react";
 
-interface TrafficLightsProps {
+type RatingTrafficLightsProps = {
   onColorChange?: (color: ColorType) => void;
 }
 
@@ -13,11 +13,8 @@ export const TrafficColor = {
 
 export type ColorType = keyof typeof TrafficColor;
 
-export const TrafficLights = ({ onColorChange }: TrafficLightsProps) => {
-  const [isActive, setIsActive] = useState("default");
-
+export const RatingTrafficLights: FC<RatingTrafficLightsProps> = ({ onColorChange }) => {
   const changeBorder = (color: ColorType) => {
-    setIsActive(color);
     onColorChange?.(color);
   };
 

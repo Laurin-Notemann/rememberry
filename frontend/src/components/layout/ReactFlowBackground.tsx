@@ -3,8 +3,8 @@ import React from "react";
 import ReactFlow, { Background, ReactFlowProvider } from "reactflow";
 import "reactflow/dist/style.css";
 
-const RememberryBackground: React.FC = () => {
-  return (
+export const ReactFlowBackground = () => (
+  <ReactFlowProvider>
     <div
       style={{ height: "100vh", width: "100vw" }}
       className="flex flex-col justify-items-center"
@@ -13,13 +13,5 @@ const RememberryBackground: React.FC = () => {
         <Background className="  bg-white dark:bg-dark-900" />
       </ReactFlow>
     </div>
-  );
-};
-
-export default function FlowBackground() {
-  return (
-    <ReactFlowProvider>
-      <RememberryBackground />
-    </ReactFlowProvider>
-  );
-}
+  </ReactFlowProvider>
+);

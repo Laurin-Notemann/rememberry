@@ -1,9 +1,9 @@
 import { MapDeleteInput } from "@frontend/lib/services/maps/map.types";
 import { MoveDiagonal, PenLine, X } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { FC } from "react";
 
-interface MapCardProps {
+type MapPreviewCardProps = {
   map: {
     name: string;
     description: string;
@@ -20,7 +20,7 @@ interface MapCardProps {
   ) => Promise<readonly [null, boolean] | readonly [string, null]>;
 }
 
-const MapCard: React.FC<MapCardProps> = ({
+export const MapPreviewCard: FC<MapPreviewCardProps> = ({
   map,
   openEditMapDialog,
   deleteMap,
@@ -63,5 +63,3 @@ const MapCard: React.FC<MapCardProps> = ({
     </div>
   );
 };
-
-export default MapCard;

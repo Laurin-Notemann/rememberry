@@ -1,13 +1,14 @@
 "use client";
 import { Button } from "@frontend/components/ui/button";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import { FC } from "react";
 
-interface SidebarButtonProps {
+type SidebarButtonProps = {
   isOpen: boolean;
   toggleSidebar: () => void;
 }
 
-export function SidebarButton({ isOpen, toggleSidebar }: SidebarButtonProps) {
+export const SidebarButton: FC<SidebarButtonProps> = ({ isOpen, toggleSidebar }) => {
   const activeButton = isOpen
     ? "bg-primary hover:bg-primarylight dark:bg-800 dark:hover:bg-primaryLight"
     : "";

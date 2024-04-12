@@ -1,17 +1,18 @@
 import { Field } from "formik";
-import { Input } from "./input";
+import { Input } from "../ui/input";
+import { FC } from "react";
 
-type FormElementProps = {
+type FormFieldProps = {
   id: string;
   placeholder: string;
   type: string;
 };
 
-export default function FormElement({
+export const FormField: FC<FormFieldProps> = ({
   id,
   placeholder,
   type,
-}: FormElementProps) {
+}) => {
   return (
     <div className="flex flex-col gap-1 dark:bg-dark-800">
       <label htmlFor={type}>

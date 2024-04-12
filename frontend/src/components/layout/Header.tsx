@@ -1,22 +1,22 @@
-import { DropDown } from "@frontend/components/Flow/Header/DropDown";
-import { ModeToggle } from "@frontend/components/ui/ModeToggle";
-import { SidebarButton } from "@frontend/components/ui/SidebarButton";
+import { DifficultyPicker } from "@frontend/components/layout/DifficultyPicker";
+import { DarkWhiteModeToggle } from "@frontend/components/layout/DarkWhiteModeToggle";
+import { SidebarButton } from "@frontend/components/layout/SidebarButton";
 import { Button } from "@frontend/components/ui/button";
 import { Card } from "@frontend/components/ui/card";
 import useGetMapByUserId from "@frontend/lib/services/maps/useGetMapsByUserId";
 import Link from "next/link";
 import { Panel } from "reactflow";
+import { FC } from "react";
 
-interface HeaderProps {
+type HeaderProps = {
   isOpen: boolean;
-  toggleSidebar: () => void;
   mapName: string;
+  toggleSidebar: () => void;
   openHandler: () => void;
 }
 
-export const FlowHeader: React.FC<HeaderProps> = ({
+export const Header: FC<HeaderProps> = ({
   isOpen,
-  toggleSidebar,
   mapName,
   openHandler,
 }) => {
@@ -35,9 +35,8 @@ export const FlowHeader: React.FC<HeaderProps> = ({
     <div>
       <div className="relative ">
         <div
-          className={`fixed z-10 ${
-            isOpen ? "translate-x-0" : "-translate-x-full"
-          } ease-in-out duration-300 flex flex-row `}
+          className={`fixed z-10 ${isOpen ? "translate-x-0" : "-translate-x-full"
+            } ease-in-out duration-300 flex flex-row `}
         >
           <div className=" overflow-scroll w-56 h-screen bg-white dark:bg-dark-900 px-5 border-r-2 pt-5 dark:border-dark-300/50">
             <h1 className=" text-lg font-semibold text-center text-primary mb-4">
@@ -84,8 +83,8 @@ export const FlowHeader: React.FC<HeaderProps> = ({
             </Link>
           </div>
           <div className="flex gap-5">
-            <DropDown />
-            <ModeToggle />
+            <DifficultyPicker />
+            <DarkWhiteModeToggle />
           </div>
         </div>
       </Panel>

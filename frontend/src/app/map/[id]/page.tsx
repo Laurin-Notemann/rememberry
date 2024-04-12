@@ -1,10 +1,10 @@
 "use client";
-import FlowBackground from "@frontend/components/Flow/Background/flowBackground";
-import NodeEdge from "@frontend/components/Flow/CardComponents/NodeEdge";
-import NodeWithState from "@frontend/components/Flow/CardComponents/NodewithState";
-import { DialogTwoInputs } from "@frontend/components/Flow/CustomComponents/DialogTwoInputs";
-import FlowFooter from "@frontend/components/Flow/CustomComponents/flowFooter";
-import { FlowHeader } from "@frontend/components/Flow/Header/FlowHeader";
+import { ReactFlowBackground } from "@frontend/components/layout/ReactFlowBackground";
+import { NodeEdge } from "@frontend/components/nodes/NodeEdge";
+import { NodeMemo } from "@frontend/components/nodes/NodeStateful";
+import { DialogTwoInputs } from "@frontend/components/map-node-dialog/DialogTwoInputs";
+import { Footer } from "@frontend/components/layout/Footer";
+import { Header } from "@frontend/components/layout/Header";
 import { Button } from "@frontend/components/ui/button";
 import useGetMapByUserId from "@frontend/lib/services/maps/useGetMapsByUserId";
 import { NodeData } from "@frontend/lib/services/node/node.types";
@@ -36,7 +36,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 
 const nodeTypes = {
-  node: NodeWithState,
+  node: NodeMemo,
 };
 
 const edgeTypes = {
@@ -246,7 +246,7 @@ function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
       style={{ height: "100vh", width: "100vw" }}
       className="flex flex-col justify-items-center"
     >
-      <FlowHeader
+      <Header
         mapName={mapName}
         openHandler={() => setIsSidebarOpen(!isSidebarOpen)}
         isOpen={isSidebarOpen}
@@ -283,11 +283,11 @@ function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
         minZoom={0.1}
         onNodeDragStop={onDragEnd}
       >
-        <FlowBackground />
+        <ReactFlowBackground />
         {/* <MiniMap /> */}
         <Controls showInteractive={false} />
 
-        <FlowFooter>
+        <Footer>
           <Button
             variant="default"
             className="border-2 border-white dark:border-dark-900"
@@ -295,7 +295,7 @@ function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
           >
             Add flashcard
           </Button>
-        </FlowFooter>
+        </Footer>
       </ReactFlow>
     </div>
   );

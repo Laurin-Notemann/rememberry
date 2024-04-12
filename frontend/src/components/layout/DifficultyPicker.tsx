@@ -7,9 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@frontend/components/ui/select";
-import useDropDownFocusStore from "../stores/headerDropdownStore";
+import useDropDownFocusStore from "../../lib/services/stores/headerDropdownStore";
 
-export function DropDown() {
+export const DifficultyPicker = () =>  {
   const title = useDropDownFocusStore((state) => state.dropdownName);
   const updateTitle = useDropDownFocusStore((state) => state.updateDropDown);
 

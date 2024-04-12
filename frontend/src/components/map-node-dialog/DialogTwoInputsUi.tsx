@@ -1,10 +1,10 @@
 import { Button } from "@frontend/components/ui/button";
 import { Dialog, DialogContent } from "@frontend/components/ui/dialog";
-import React, { useRef } from "react";
-import useAutosizeTextArea from "../hooks/useAutosizeTextArea";
-import { FlowTextArea } from "./flowTextArea";
+import React, { FC, useRef } from "react";
+import { ResizeableTextArea } from "./ResizeableTextArea";
+import { useAutosizeTextArea } from "./useAutosizeTextArea";
 
-interface DialogTwoInputsProps {
+type DialogTwoInputsProps = {
   classNameInputFields: string;
   topInput: string;
   bottomInput: string;
@@ -19,7 +19,7 @@ interface DialogTwoInputsProps {
   changeBottomInput: (input: string) => void;
 }
 
-export const DialogTwoInputsUI: React.FC<DialogTwoInputsProps> = ({
+export const DialogTwoInputsUI: FC<DialogTwoInputsProps> = ({
   topInput,
   bottomInput,
   placeholderTopInput,
@@ -44,7 +44,7 @@ export const DialogTwoInputsUI: React.FC<DialogTwoInputsProps> = ({
         <form onSubmit={onSubmit}>
           <div>
             <div>
-              <FlowTextArea
+              <ResizeableTextArea
                 className={classNameInputFields}
                 value={topInput}
                 placeholder={placeholderTopInput}
@@ -57,7 +57,7 @@ export const DialogTwoInputsUI: React.FC<DialogTwoInputsProps> = ({
             </div>
 
             <div className="leading-6 text-justify">
-              <FlowTextArea
+              <ResizeableTextArea
                 className={classNameInputFields}
                 value={bottomInput}
                 placeholder={placeholderBottomInput}

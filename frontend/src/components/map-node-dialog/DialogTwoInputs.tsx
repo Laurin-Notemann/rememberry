@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { DialogTwoInputsUI } from "./DialogTwoInputsUi";
 
-interface DialogTwoInputsStatefulProps {
+type DialogTwoInputsStatefulProps = {
   topInput: string;
   bottomInput: string;
   placeholderTopInput: string;
@@ -16,7 +16,7 @@ interface DialogTwoInputsStatefulProps {
  * a small modal with two inputs.
  * we use this e.g. for the "create map" dialog and the "create node" dialog.
  */
-export const DialogTwoInputs: React.FC<DialogTwoInputsStatefulProps> = ({
+export const DialogTwoInputs: FC<DialogTwoInputsStatefulProps> = ({
   topInput,
   bottomInput,
   isDialogOpen,
