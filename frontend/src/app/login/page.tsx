@@ -10,8 +10,8 @@ import { FormField } from "@frontend/components/authentication/FormField";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
-import useLoginUser from "../../lib/services/authentication/useLoginUser";
-import useRegisterUser from "../../lib/services/authentication/useRegisterUser";
+import { useLoginUser } from "../../lib/services/authentication/useLoginUser";
+import { useRegisterUser } from "../../lib/services/authentication/useRegisterUser";
 
 export default function Login() {
   const register = useRegisterUser();

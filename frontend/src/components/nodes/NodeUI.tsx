@@ -23,7 +23,7 @@ type NodeUIProps = {
   handleColorChange: (color: ColorType) => void;
   deleteNode: () => void;
   editNode: () => void;
-}
+};
 
 export const NodeUI: React.FC<NodeUIProps> = ({
   isFront,
@@ -70,9 +70,9 @@ export const NodeUI: React.FC<NodeUIProps> = ({
             value={isFront ? frontside : backside}
             textAreaRef={isFront ? frontsideAreaRef : backsideAreaRef}
             placeholder={""}
-            changes={function (): void { }}
+            changes={() => {}}
             isInput={false}
-            onSubmit={function (): void { }}
+            onSubmit={() => {}}
             isFocussed={false}
           />
         </div>

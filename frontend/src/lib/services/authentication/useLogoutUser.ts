@@ -2,7 +2,7 @@ import { TRPCClientError } from "@trpc/client";
 import { rqTrpc } from "../trpc/client";
 import { useUserStore } from "./userStore";
 
-export default function useLogoutUser() {
+export const useLogoutUser = () => {
   const userCreator = rqTrpc.auth.logout.useMutation();
   const userStore = useUserStore();
   const logoutUser = async () => {
@@ -18,4 +18,4 @@ export default function useLogoutUser() {
     }
   };
   return logoutUser;
-}
+};

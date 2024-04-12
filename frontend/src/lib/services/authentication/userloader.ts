@@ -7,7 +7,7 @@ type FetchedUser = {
   user?: User;
 };
 
-export async function userLoader(session?: string) {
+export const userLoader = async (session?: string) => {
   if (!session) return null;
   const host = getHost();
   const url = host + "/api/auth/user?session=" + session;
@@ -26,7 +26,7 @@ export async function userLoader(session?: string) {
 
     return null;
   }
-}
+};
 
 const getHost = () => {
   if (env.IS_DEV) return `http://${env.FRONTEND_HOST}:${env.FRONTEND_PORT}`;

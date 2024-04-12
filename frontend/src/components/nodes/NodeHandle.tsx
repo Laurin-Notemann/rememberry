@@ -2,8 +2,8 @@ import { FC } from "react";
 import { Handle, Position } from "reactflow";
 
 type NodeHandleProps = {
-  position: Position
-}
+  position: Position;
+};
 
 export const NodeHandle: FC<NodeHandleProps> = ({ position }) => {
   const handleStyle = {

@@ -4,7 +4,7 @@ import { BaseEdge, EdgeProps, getStraightPath } from "reactflow";
 /**
  * the line drawn between flashcard nodes
  */
-export const NodeEdge: FC<EdgeProps> = ({...props}) => {
+export const NodeEdge: FC<EdgeProps> = ({ ...props }) => {
   const { sourceX, sourceY, targetX, targetY } = props;
 
   const [edgePath] = getStraightPath({
@@ -15,4 +15,4 @@ export const NodeEdge: FC<EdgeProps> = ({...props}) => {
   });
 
   return <BaseEdge path={edgePath} {...props} />;
-}
+};

@@ -8,11 +8,7 @@ type FormFieldProps = {
   type: string;
 };
 
-export const FormField: FC<FormFieldProps> = ({
-  id,
-  placeholder,
-  type,
-}) => {
+export const FormField: FC<FormFieldProps> = ({ id, placeholder, type }) => {
   return (
     <div className="flex flex-col gap-1 dark:bg-dark-800">
       <label htmlFor={type}>
@@ -29,4 +25,4 @@ export const FormField: FC<FormFieldProps> = ({
       />
     </div>
   );
-}
+};

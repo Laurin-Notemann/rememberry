@@ -2,7 +2,7 @@ import { FC } from "react";
 
 type RatingTrafficLightsProps = {
   onColorChange?: (color: ColorType) => void;
-}
+};
 
 export const TrafficColor = {
   green: "green-500",
@@ -13,7 +13,9 @@ export const TrafficColor = {
 
 export type ColorType = keyof typeof TrafficColor;
 
-export const RatingTrafficLights: FC<RatingTrafficLightsProps> = ({ onColorChange }) => {
+export const RatingTrafficLights: FC<RatingTrafficLightsProps> = ({
+  onColorChange,
+}) => {
   const changeBorder = (color: ColorType) => {
     onColorChange?.(color);
   };

@@ -10,7 +10,7 @@ import {
 type FetchUserProps = {
   user: User | null;
   children: ReactNode;
-}
+};
 
 export const FetchUser: FC<FetchUserProps> = ({ user, children }) => {
   const router = useRouter();
@@ -31,4 +31,4 @@ export const FetchUser: FC<FetchUserProps> = ({ user, children }) => {
   if (isLoading) return <Loading />;
 
   return <>{children}</>;
-}
+};

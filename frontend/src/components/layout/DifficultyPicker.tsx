@@ -7,9 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@frontend/components/ui/select";
-import useDropDownFocusStore from "../../lib/services/stores/headerDropdownStore";
+import { useDropDownFocusStore } from "../../lib/services/stores/headerDropdownStore";
 
-export const DifficultyPicker = () =>  {
+export const DifficultyPicker = () => {
   const title = useDropDownFocusStore((state) => state.dropdownName);
   const updateTitle = useDropDownFocusStore((state) => state.updateDropDown);
 
@@ -42,4 +42,4 @@ export const DifficultyPicker = () =>  {
       </SelectContent>
     </Select>
   );
-}
+};

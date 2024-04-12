@@ -38,4 +38,4 @@ export const DarkWhiteModeToggle = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};

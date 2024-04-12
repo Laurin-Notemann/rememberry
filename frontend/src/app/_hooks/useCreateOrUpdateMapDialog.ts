@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useCreateOrUpdateMapDialog() {
+export const useCreateOrUpdateMapDialog = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
   const [dialogName, setDialogName] = useState("");
@@ -39,4 +39,4 @@ export default function useCreateOrUpdateMapDialog() {
     openDialog,
     closeDialog,
   };
-}
+};

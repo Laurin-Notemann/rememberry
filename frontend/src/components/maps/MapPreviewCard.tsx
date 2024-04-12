@@ -18,7 +18,7 @@ type MapPreviewCardProps = {
   deleteMap: (
     mapId: MapDeleteInput,
   ) => Promise<readonly [null, boolean] | readonly [string, null]>;
-}
+};
 
 export const MapPreviewCard: FC<MapPreviewCardProps> = ({
   map,

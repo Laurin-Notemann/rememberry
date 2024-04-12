@@ -2,9 +2,9 @@ import { TRPCClientError } from "@trpc/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-export function cn(...inputs: ClassValue[]) {
+export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
-}
+};
 
 export const normalizeZoom = (zoom: number): number => {
   // Adjust the calculation as necessary to fit the desired size

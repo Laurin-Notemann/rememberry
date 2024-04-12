@@ -10,7 +10,7 @@ type DialogTwoInputsStatefulProps = {
   onSubmit: (topInput: string, bottomInput: string) => void;
   closeDialog: () => void;
   classNameInputFields: string;
-}
+};
 
 /**
  * a small modal with two inputs.

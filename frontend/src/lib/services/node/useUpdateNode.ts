@@ -4,7 +4,7 @@ import { getQueryKey } from "@trpc/react-query";
 import { NodeUpdateInput } from "./node.types";
 import { nodeRouter } from "./utils";
 
-export default function useNodeUpdate() {
+export const useNodeUpdate = () => {
   const queryClient = useQueryClient();
 
   const nodeUpdater = nodeRouter.updateById.useMutation({
@@ -20,4 +20,4 @@ export default function useNodeUpdate() {
   };
 
   return updatedNode;
-}
+};

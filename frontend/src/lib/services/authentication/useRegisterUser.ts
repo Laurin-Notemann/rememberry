@@ -5,7 +5,7 @@ import { useUserStore } from "./userStore";
 export type RegisterUserInput = RouterInput["auth"]["register"];
 export type RegisterUserOutput = RouterOutput["auth"]["register"];
 
-export default function useRegisterUser() {
+export const useRegisterUser = () => {
   const userCreator = rqTrpc.auth.register.useMutation();
   const userStore = useUserStore();
   const registerUser = async (params: { user: RegisterUserInput }) => {
@@ -22,4 +22,4 @@ export default function useRegisterUser() {
     }
   };
   return registerUser;
-}
+};

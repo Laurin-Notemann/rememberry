@@ -17,7 +17,7 @@ type DialogTwoInputsProps = {
   discardChanges: () => void;
   changeTopInput: (input: string) => void;
   changeBottomInput: (input: string) => void;
-}
+};
 
 export const DialogTwoInputsUI: FC<DialogTwoInputsProps> = ({
   topInput,

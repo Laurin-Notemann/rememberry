@@ -6,9 +6,12 @@ import { FC } from "react";
 type SidebarButtonProps = {
   isOpen: boolean;
   toggleSidebar: () => void;
-}
+};
 
-export const SidebarButton: FC<SidebarButtonProps> = ({ isOpen, toggleSidebar }) => {
+export const SidebarButton: FC<SidebarButtonProps> = ({
+  isOpen,
+  toggleSidebar,
+}) => {
   const activeButton = isOpen
     ? "bg-primary hover:bg-primarylight dark:bg-800 dark:hover:bg-primaryLight"
     : "";
@@ -27,4 +30,4 @@ export const SidebarButton: FC<SidebarButtonProps> = ({ isOpen, toggleSidebar })
       )}
     </Button>
   );
-}
+};

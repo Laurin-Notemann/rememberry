@@ -9,7 +9,7 @@ type ResizeableTextAreaProps = {
   isFocussed: boolean;
   onSubmit: (e: React.FormEvent) => void;
   changes: (value: string) => void;
-}
+};
 
 export const ResizeableTextArea: FC<ResizeableTextAreaProps> = ({
   className,

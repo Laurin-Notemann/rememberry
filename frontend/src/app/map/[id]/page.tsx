@@ -6,18 +6,18 @@ import { DialogTwoInputs } from "@frontend/components/map-node-dialog/DialogTwoI
 import { Footer } from "@frontend/components/layout/Footer";
 import { Header } from "@frontend/components/layout/Header";
 import { Button } from "@frontend/components/ui/button";
-import useGetMapByUserId from "@frontend/lib/services/maps/useGetMapsByUserId";
+import { useGetMapByUserId } from "@frontend/lib/services/maps/useGetMapsByUserId";
 import { NodeData } from "@frontend/lib/services/node/node.types";
-import useNodeCreate from "@frontend/lib/services/node/useCreateNode";
-import useNodeDelete from "@frontend/lib/services/node/useDeleteNode";
-import useGetNodesByMapId from "@frontend/lib/services/node/useGetNodesByMapId";
-import useNodeUpdate from "@frontend/lib/services/node/useUpdateNode";
+import { useNodeCreate } from "@frontend/lib/services/node/useCreateNode";
+import { useNodeDelete } from "@frontend/lib/services/node/useDeleteNode";
+import { useGetNodesByMapId } from "@frontend/lib/services/node/useGetNodesByMapId";
+import { useNodeUpdate } from "@frontend/lib/services/node/useUpdateNode";
 import {
   databaseNodeToStoreNode,
   storeNodeToDatabaseNode,
 } from "@frontend/lib/services/node/utils";
 import { nanoid } from "nanoid/non-secure";
-import { useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import ReactFlow, {
   Controls,
@@ -52,7 +52,7 @@ type MapProps = {
   mapName: string;
 };
 
-function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
+const Map: FC<MapProps> = ({ nodesProp, edgesProp, mapId, mapName }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<NodeData>(nodesProp);
   const [edges, setEdges, onEdgesChange] = useEdgesState(edgesProp);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -299,7 +299,7 @@ function Map({ nodesProp, edgesProp, mapId, mapName }: MapProps) {
       </ReactFlow>
     </div>
   );
-}
+};
 
 type MapParams = {
   params: { id: string };

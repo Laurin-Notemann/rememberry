@@ -143,3 +143,10 @@ Fronted UI:
 Backend:
 
 - Lennart Pafel [lnart](https://github.com/lnart)
+
+## Code guidelines
+- all functions are defined as arrow function () => {}
+    - except methods for classes and page.tsx pages
+- all exports are named, no default export except for page.tsx
+- for components with props we use FC
+    - e.g. export const test: FC<props> = ({...props}) => {}
