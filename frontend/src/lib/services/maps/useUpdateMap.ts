@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import { MapUpdateInput, mapRouter } from "./map.types";
 
-export default function useUpdateMap() {
+export const useUpdateMap = () => {
   const queryClient = useQueryClient();
   const mapUpdater = mapRouter.updateMap.useMutation({
     onSuccess() {
@@ -18,4 +18,4 @@ export default function useUpdateMap() {
   };
 
   return updateMap;
-}
+};

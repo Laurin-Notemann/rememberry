@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@frontend/components/ui/card";
-import FormElement from "@frontend/components/ui/formElement";
+import { FormField } from "@frontend/components/authentication/FormField";
 import { Form, Formik } from "formik";
 import { useState } from "react";
 import { useUserStore } from "../../lib/services/authentication/userStore";
@@ -44,25 +44,25 @@ export default function Settings() {
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-col gap-1.5">
-                        <FormElement
+                        <FormField
                           id="username"
                           type="text"
                           key={initialValues.username}
                           placeholder="Wolfie"
                         />
-                        <FormElement
+                        <FormField
                           id="email"
                           type="email"
                           key={initialValues.email}
                           placeholder="jordan.belfort@gmail.com"
                         />
-                        <FormElement
+                        <FormField
                           id="password"
                           type="password"
                           key={initialValues.password}
                           placeholder="New Password"
                         />
-                        <FormElement
+                        <FormField
                           id="passwordCheck"
                           type="password"
                           key={""}

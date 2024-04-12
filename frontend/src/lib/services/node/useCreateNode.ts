@@ -4,7 +4,7 @@ import { getQueryKey } from "@trpc/react-query";
 import { NodeCreationInput } from "./node.types";
 import { nodeRouter } from "./utils";
 
-export default function useNodeCreate() {
+export const useNodeCreate = () => {
   const queryClient = useQueryClient();
   const nodeCreator = nodeRouter.create.useMutation({
     onSuccess() {
@@ -19,4 +19,4 @@ export default function useNodeCreate() {
   };
 
   return createNode;
-}
+};

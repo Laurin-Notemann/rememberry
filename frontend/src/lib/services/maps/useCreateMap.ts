@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import { MapCreateInput, mapRouter } from "./map.types";
 
-export default function useCreateMap() {
+export const useCreateMap = () => {
   const queryClient = useQueryClient();
   const mapCreator = mapRouter.createMap.useMutation({
     onSuccess() {
@@ -18,4 +18,4 @@ export default function useCreateMap() {
   };
 
   return createMap;
-}
+};

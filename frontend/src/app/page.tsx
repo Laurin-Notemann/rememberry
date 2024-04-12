@@ -1,20 +1,20 @@
 // root page
 "use client";
-import MapCard from "@frontend/components/Flow/CardComponents/MapCard";
-import { DialogTwoInputs } from "@frontend/components/Flow/CustomComponents/DialogTwoInputs";
-import FlowFooter from "@frontend/components/Flow/CustomComponents/flowFooter";
-import useCreateOrUpdateMapDialog from "@frontend/components/Flow/MapMenu/useCreateOrUpdateMapDialog";
+import { MapPreviewCard } from "@frontend/components/maps/MapPreviewCard";
+import { DialogTwoInputs } from "@frontend/components/map-node-dialog/DialogTwoInputs";
+import { Footer } from "@frontend/components/layout/Footer";
+import { useCreateOrUpdateMapDialog } from "@frontend/app/_hooks/useCreateOrUpdateMapDialog";
 import { Button } from "@frontend/components/ui/button";
 import { useUserStore } from "@frontend/lib/services/authentication/userStore";
-import useCreateMap from "@frontend/lib/services/maps/useCreateMap";
-import useDeleteMap from "@frontend/lib/services/maps/useDeleteMap";
-import useGetMapByUserId from "@frontend/lib/services/maps/useGetMapsByUserId";
-import useUpdateMap from "@frontend/lib/services/maps/useUpdateMap";
+import { useCreateMap } from "@frontend/lib/services/maps/useCreateMap";
+import { useDeleteMap } from "@frontend/lib/services/maps/useDeleteMap";
+import { useGetMapByUserId } from "@frontend/lib/services/maps/useGetMapsByUserId";
+import { useUpdateMap } from "@frontend/lib/services/maps/useUpdateMap";
 import { Box } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import "reactflow/dist/style.css";
 
-function MapMenu() {
+export default function Home() {
   const { isLoading, maps } = useGetMapByUserId();
 
   const userId = useUserStore((state) => state.user?.id || null);
@@ -97,7 +97,7 @@ function MapMenu() {
               <>
                 <div className="outline-none   mx-5 my-5" key={map.id}>
                   <Box>
-                    <MapCard
+                    <MapPreviewCard
                       map={map}
                       openEditMapDialog={openDialog}
                       deleteMap={deleteMap}
@@ -108,14 +108,12 @@ function MapMenu() {
             ),
           )}
         </div>
-        <FlowFooter>
+        <Footer>
           <>
             <Button onClick={() => openDialog(true)}>Add Map</Button>
           </>
-        </FlowFooter>
+        </Footer>
       </div>
     </div>
   );
 }
-
-export default MapMenu;

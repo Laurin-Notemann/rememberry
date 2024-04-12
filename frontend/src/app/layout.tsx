@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import React from "react";
-import CheckAuthentication from "../components/Authentication/CheckAuthentication";
+import { FetchUser } from "../components/authentication/FetchUser";
 import { userLoader } from "../lib/services/authentication/userloader";
 import Providers from "./providers";
 
@@ -38,7 +38,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <CheckAuthentication user={user}>{children}</CheckAuthentication>
+          <FetchUser user={user}>{children}</FetchUser>
         </Providers>
       </body>
       {/* condition needed to check the authentication status */}

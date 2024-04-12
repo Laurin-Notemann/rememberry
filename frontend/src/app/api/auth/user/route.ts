@@ -4,7 +4,7 @@ import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 import { NextRequest } from "next/server";
 import superjson from "superjson";
 
-export async function GET(req: NextRequest) {
+export const GET = async (req: NextRequest) => {
   const session = req.nextUrl.searchParams.get("session");
 
   if (!session) {
@@ -27,9 +27,9 @@ export async function GET(req: NextRequest) {
       { status: 400 },
     );
   }
-}
+};
 
-function getTrpcClient(session: string) {
+const getTrpcClient = (session: string) => {
   const getBackendUrll = () => {
     if (env.DOCKER_BACKEND_HOST) {
       return (
@@ -69,4 +69,4 @@ function getTrpcClient(session: string) {
   });
 
   return regTrpc;
-}
+};

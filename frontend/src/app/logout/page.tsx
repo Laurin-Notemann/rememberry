@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserStore } from "../../lib/services/authentication/userStore";
-import TestLogout from "./TestLogout";
+import { TestLogout } from "./TestLogout";
 
 export default function Logout() {
   const userStore = useUserStore();

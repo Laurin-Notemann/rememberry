@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import { MapDeleteInput, mapRouter } from "./map.types";
 
-export default function useDeleteMap() {
+export const useDeleteMap = () => {
   const queryClient = useQueryClient();
   const mapDeletion = mapRouter.deleteMapWithAllStacks.useMutation({
     onSuccess() {
@@ -18,4 +18,4 @@ export default function useDeleteMap() {
   };
 
   return deleteMap;
-}
+};

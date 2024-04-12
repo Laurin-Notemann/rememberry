@@ -4,7 +4,7 @@ import { getQueryKey } from "@trpc/react-query";
 import { NodeDeleteInput } from "./node.types";
 import { nodeRouter } from "./utils";
 
-export default function useNodeDelete() {
+export const useNodeDelete = () => {
   const queryClient = useQueryClient();
 
   const nodeDeletor = nodeRouter.deleteWithAllChildren.useMutation({
@@ -19,4 +19,4 @@ export default function useNodeDelete() {
   };
 
   return deleteNode;
-}
+};

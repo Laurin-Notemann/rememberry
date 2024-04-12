@@ -6,12 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@frontend/components/ui/card";
-import FormElement from "@frontend/components/ui/formElement";
+import { FormField } from "@frontend/components/authentication/FormField";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
-import useLoginUser from "../../lib/services/authentication/useLoginUser";
-import useRegisterUser from "../../lib/services/authentication/useRegisterUser";
+import { useLoginUser } from "../../lib/services/authentication/useLoginUser";
+import { useRegisterUser } from "../../lib/services/authentication/useRegisterUser";
 
 export default function Login() {
   const register = useRegisterUser();
@@ -63,12 +63,12 @@ export default function Login() {
                       )}
 
                       <div className="flex flex-col gap-1.5">
-                        <FormElement
+                        <FormField
                           id="email"
                           type="email"
                           placeholder="Your Email"
                         />
-                        <FormElement
+                        <FormField
                           id="password"
                           type="password"
                           placeholder="Password"
@@ -119,22 +119,22 @@ export default function Login() {
                           <p className="text-sm text-error">{errors.email}</p>
                         )}
 
-                        <FormElement
+                        <FormField
                           id="username"
                           type="username"
                           placeholder="Username"
                         />
-                        <FormElement
+                        <FormField
                           id="email"
                           type="email"
                           placeholder="Email"
                         />
-                        <FormElement
+                        <FormField
                           id="password"
                           type="password"
                           placeholder="Password"
                         />
-                        <FormElement
+                        <FormField
                           id="confirmPassword"
                           type="password"
                           placeholder="Confirm Password"

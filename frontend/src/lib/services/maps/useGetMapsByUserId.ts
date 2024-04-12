@@ -1,7 +1,7 @@
 import { useUserStore } from "../authentication/userStore";
 import { MapGetMapsOutput, mapRouter } from "./map.types";
 
-export default function useGetMapByUserId() {
+export const useGetMapByUserId = () => {
   const userId = useUserStore((state) => {
     if (state.user) return state.user.id;
     return null;
@@ -24,4 +24,4 @@ export default function useGetMapByUserId() {
     isError: maps.isError,
     maps: maps.data as MapGetMapsOutput,
   };
-}
+};
