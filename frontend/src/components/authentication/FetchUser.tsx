@@ -1,11 +1,7 @@
 "use client";
-import Loading from "@frontend/app/loading";
-import { useRouter } from "next/navigation";
-import { FC, ReactNode, useEffect, useState } from "react";
-import {
-  User,
-  useUserStore,
-} from "../../lib/services/authentication/userStore";
+import { FC, ReactNode } from "react";
+import { User } from "../../lib/services/authentication/userStore";
+import { useFetchUser } from "./useFetchUser";
 
 type FetchUserProps = {
   user: User | null;
@@ -13,22 +9,7 @@ type FetchUserProps = {
 };
 
 export const FetchUser: FC<FetchUserProps> = ({ user, children }) => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-
-  const userStore = useUserStore();
-
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");
-      userStore.actions.deleteUser();
-    } else {
-      userStore.actions.setUser(user);
-    }
-    setIsLoading(false);
-  }, [user, router, userStore.actions, isLoading]);
-
-  if (isLoading) return <Loading />;
-
+  const { isLoading } = useFetchUser({ user });
+  if (isLoading) return null;
   return <>{children}</>;
 };

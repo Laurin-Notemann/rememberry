@@ -1,4 +1,3 @@
-// root page
 "use client";
 import { MapPreviewCard } from "@frontend/components/maps/MapPreviewCard";
 import { DialogTwoInputs } from "@frontend/components/map-node-dialog/DialogTwoInputs";
@@ -12,14 +11,17 @@ import { useGetMapByUserId } from "@frontend/lib/services/maps/useGetMapsByUserI
 import { useUpdateMap } from "@frontend/lib/services/maps/useUpdateMap";
 import { Box } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
-import "reactflow/dist/style.css";
+import { Header } from "@frontend/components/layout/Header";
+import { TitleHeader } from "@frontend/components/ui/title-header";
 
 export default function Home() {
   const { isLoading, maps } = useGetMapByUserId();
 
-  const userId = useUserStore((state) => state.user?.id || null);
-  const createMap = useCreateMap();
+  const userStore = useUserStore();
+
   const router = useRouter();
+
+  const createMap = useCreateMap();
   const deleteMap = useDeleteMap();
   const updateMap = useUpdateMap();
 
@@ -34,7 +36,7 @@ export default function Home() {
     closeDialog,
   } = useCreateOrUpdateMapDialog();
 
-  if (!userId || isLoading) return null;
+  if (!userStore.user || isLoading || !maps) return <></>;
 
   const mapsSortedByDescendingCreatedDate = maps.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -44,12 +46,12 @@ export default function Home() {
    * handles the creation or editing of a map.
    */
   const createOrUpdateMap = async (name: string, description: string) => {
-    if (userId) {
+    if (userStore.user!.id) {
       if (isCreate) {
         const [_err, map] = await createMap({
           name,
           description,
-          userId: userId,
+          userId: userStore.user!.id,
         });
         if (map) {
           router.push("/map/" + map.id);
@@ -75,9 +77,11 @@ export default function Home() {
 
   return (
     <div className="relative w-full h-full">
-      <h1 className="flex flex-col justify-center items-center mt-16 text-2xl text-primary font-medium">
-        Which map do you want to learn today?
-      </h1>
+      <Header
+        middleHeaderItems={
+          <TitleHeader>Which map do you want to learn today?</TitleHeader>
+        }
+      />
       <div className="z-10 absolute top-0 left-0 h-screen">
         {dialogOpen && (
           <DialogTwoInputs
@@ -94,24 +98,20 @@ export default function Home() {
         <div id="body" className="flex content-start p-20 flex-wrap">
           {mapsSortedByDescendingCreatedDate.map(
             (map: { id: string; name: string; description: string }) => (
-              <>
-                <div className="outline-none   mx-5 my-5" key={map.id}>
-                  <Box>
-                    <MapPreviewCard
-                      map={map}
-                      openEditMapDialog={openDialog}
-                      deleteMap={deleteMap}
-                    />
-                  </Box>
-                </div>
-              </>
+              <div className="outline-none   mx-5 my-5" key={map.id}>
+                <Box>
+                  <MapPreviewCard
+                    map={map}
+                    openEditMapDialog={openDialog}
+                    deleteMap={deleteMap}
+                  />
+                </Box>
+              </div>
             ),
           )}
         </div>
         <Footer>
-          <>
-            <Button onClick={() => openDialog(true)}>Add Map</Button>
-          </>
+          <Button onClick={() => openDialog(true)}>Add Map</Button>
         </Footer>
       </div>
     </div>

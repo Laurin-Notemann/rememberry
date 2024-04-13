@@ -3,7 +3,9 @@ import { MapGetMapsOutput, mapRouter } from "./map.types";
 
 export const useGetMapByUserId = () => {
   const userId = useUserStore((state) => {
+    console.log("hallo cih hure");
     if (state.user) return state.user.id;
+    console.log("hallo es ist schleches ist schlecht");
     return null;
   });
 

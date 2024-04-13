@@ -34,6 +34,9 @@ import ReactFlow, {
   useStoreApi,
 } from "reactflow";
 import "reactflow/dist/style.css";
+import { Card, CardContent } from "@frontend/components/ui/card";
+import { DifficultyPicker } from "@frontend/components/layout/DifficultyPicker";
+import { TitleHeader } from "@frontend/components/ui/title-header";
 
 const nodeTypes = {
   node: NodeMemo,
@@ -247,10 +250,8 @@ const Map: FC<MapProps> = ({ nodesProp, edgesProp, mapId, mapName }) => {
       className="flex flex-col justify-items-center"
     >
       <Header
-        mapName={mapName}
-        openHandler={() => setIsSidebarOpen(!isSidebarOpen)}
-        isOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
+        middleHeaderItems={<TitleHeader>{mapName}</TitleHeader>}
+        rightHeaderItems={<DifficultyPicker />}
       />
 
       <Toaster position="bottom-center" reverseOrder={false} />
@@ -285,7 +286,6 @@ const Map: FC<MapProps> = ({ nodesProp, edgesProp, mapId, mapName }) => {
       >
         <ReactFlowBackground />
         {/* <MiniMap /> */}
-        <Controls showInteractive={false} />
 
         <Footer>
           <Button
