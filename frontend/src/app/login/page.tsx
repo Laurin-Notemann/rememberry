@@ -1,4 +1,6 @@
 "use client";
+import { FormField } from "@frontend/components/authentication/FormField";
+import { Header } from "@frontend/components/layout/Header";
 import { Button } from "@frontend/components/ui/button";
 import {
   Card,
@@ -6,12 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@frontend/components/ui/card";
-import { FormField } from "@frontend/components/authentication/FormField";
+import { useUserStore } from "@frontend/lib/services/authentication/userStore";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import { useLoginUser } from "../../lib/services/authentication/useLoginUser";
 import { useRegisterUser } from "../../lib/services/authentication/useRegisterUser";
+import { TitleHeader } from "@frontend/components/ui/title-header";
 
 export default function Login() {
   const register = useRegisterUser();
@@ -19,7 +22,10 @@ export default function Login() {
   const router = useRouter();
 
   return (
-    <div className="z-10 absolute top-0 left-0 w-full h-full flex items-center justify-center">
+    <div className="top-0 left-0 w-full h-full items-center justify-center">
+      <Header
+        middleHeaderItems={<TitleHeader>Welcome to rememberry</TitleHeader>}
+      />
       <div className="z-10 relative flex flex-col items-center justify-center min-h-screen">
         <Tabs.Root defaultValue="login" className="w-[400px] h-[480px] ">
           <Tabs.List className="dark:bg-dark-800 h-10 rounded-md bg-muted p-1 text-muted-foreground grid w-fit grid-cols-2">
