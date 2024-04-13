@@ -2,12 +2,7 @@ import { useUserStore } from "../authentication/userStore";
 import { MapGetMapsOutput, mapRouter } from "./map.types";
 
 export const useGetMapByUserId = () => {
-  const userId = useUserStore((state) => {
-    console.log("hallo cih hure");
-    if (state.user) return state.user.id;
-    console.log("hallo es ist schleches ist schlecht");
-    return null;
-  });
+  const userId = useUserStore((state) => (state.user ? state.user.id : null));
 
   if (!userId) {
     return {
