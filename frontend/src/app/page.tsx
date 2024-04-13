@@ -36,7 +36,8 @@ export default function Home() {
     closeDialog,
   } = useCreateOrUpdateMapDialog();
 
-  if (!userStore.user || isLoading || !maps) return <></>;
+  if (!userStore.user) router.push("/login");
+  if (isLoading) return <></>;
 
   const mapsSortedByDescendingCreatedDate = maps.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
