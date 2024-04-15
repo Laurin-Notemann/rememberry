@@ -3,6 +3,7 @@ import { privateProcedure } from "../../middleware/validateSession";
 import { router } from "../../trpc";
 import { nodeControllerDrizzle } from "./nodes.controller";
 import { changeParentNodeInput, newNodeInput, nodeInput } from "./nodes.types";
+import { getTRPCError } from "../../utils";
 
 export const nodeRouter = router({
   create: privateProcedure.input(newNodeInput).mutation(async (opts) => {
@@ -12,6 +13,19 @@ export const nodeRouter = router({
 
     return node;
   }),
+
+  getAllByUserId: privateProcedure
+    .input(z.string().nullable())
+    .query(async (opts) => {
+      if (!opts.input) throw getTRPCError(null, "userId was null")[0];
+      const [err, node] = await nodeControllerDrizzle.getAllByUserId(
+        opts.input,
+      );
+
+      if (err) throw err;
+
+      return node;
+    }),
 
   getById: privateProcedure.input(z.string()).query(async (opts) => {
     const [err, node] = await nodeControllerDrizzle.getNodeById(opts.input);

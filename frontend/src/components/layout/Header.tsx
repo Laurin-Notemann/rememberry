@@ -18,7 +18,7 @@ export const Header: FC<HeaderProps> = ({
 }) => {
   const headerItemsClassName = "flex gap-5";
   return (
-    <div className="flex items-center justify-between w-full px-12 py-4 bg-white dark:bg-dark-900">
+    <div className="flex justify-between w-full px-12 py-4 bg-white dark:bg-dark-900">
       <div className={headerItemsClassName}>
         <Link
           href="/"

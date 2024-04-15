@@ -25,11 +25,9 @@ const isLoggedIn = middleware(async ({ next, ctx }) => {
   }
 
   const cookieHeader = req.headers.cookie;
-  middlewareLogger.debug("Cookie:", cookieHeader);
 
   const sessionId = lucia.lucia.readSessionCookie(cookieHeader ?? "");
   if (!sessionId) {
-    middlewareLogger.debug("sessionId not found", cookieHeader);
     throw getTRPCError(middlewareLogger, "Invalid cookie", "UNAUTHORIZED")[0];
   }
 

@@ -7,6 +7,9 @@ import { NodeModel, nodeModelDrizzle } from "./nodes.model";
 
 interface NodeController {
   createNode: (input: NewNode) => Promise<TRPCStatus<Node>>;
+  getAllByUserId: (
+    userId: string,
+  ) => Promise<TRPCStatus<{ count: number } | null>>;
   getNodeById: (nodeId: string) => Promise<TRPCStatus<Node>>;
   getNodesByMapId: (mapId: string) => Promise<TRPCStatus<Node[]>>;
   getTopLevelNodesByMapId: (mapId: string) => Promise<TRPCStatus<Node[]>>;
@@ -38,6 +41,12 @@ class NodeControllerDrizzle implements NodeController {
 
   async createNode(newNode: NewNode) {
     const [err, node] = await this.nodeModel.createNode(newNode);
+    if (err) return getTRPCError(this.logger, err.message, err.code);
+    return [null, node] as const;
+  }
+
+  async getAllByUserId(userId: string) {
+    const [err, node] = await this.nodeModel.getAllByUserId(userId);
     if (err) return getTRPCError(this.logger, err.message, err.code);
     return [null, node] as const;
   }
