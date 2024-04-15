@@ -1,9 +1,10 @@
-import { and, eq, isNull, sql } from "drizzle-orm";
+import { and, eq, isNull, sql, count } from "drizzle-orm";
 import { DrizzleDB, db } from "../../db/db";
-import { NewNode, Node, nodes } from "../../db/schema";
+import { NewNode, Node, maps, nodes, users } from "../../db/schema";
 import { Logger, ScopedLogger } from "../../logger";
 import {
   TRPCStatus,
+  catchDrizzleErrorOneEntry,
   getModelDefaultError,
   getTRPCError,
   hasOnlyOneEntry,
@@ -11,6 +12,7 @@ import {
 
 export interface NodeModel {
   createNode: (input: NewNode) => Promise<TRPCStatus<Node>>;
+  getAllByUserId: (userId: string) => Promise<TRPCStatus<{ count: number }>>;
   getNodeById: (nodeId: string) => Promise<TRPCStatus<Node>>;
   getNodesByMapId: (mapId: string) => Promise<TRPCStatus<Node[]>>;
   getTopLevelNodesByMapId: (mapId: string) => Promise<TRPCStatus<Node[]>>;
@@ -52,6 +54,18 @@ class NodeModelDrizzle implements NodeModel {
     } catch (e) {
       return getModelDefaultError(e, this.logger);
     }
+  }
+
+  async getAllByUserId(userId: string) {
+    return catchDrizzleErrorOneEntry(
+      () =>
+        this.db.drizzle
+          .select({ count: count() })
+          .from(nodes)
+          .innerJoin(maps, eq(maps.id, nodes.mapId))
+          .innerJoin(users, eq(users.id, userId)),
+      this.logger,
+    );
   }
 
   async getNodeById(nodeId: string) {

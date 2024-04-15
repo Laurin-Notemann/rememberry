@@ -1,87 +1,73 @@
 "use client";
-import { FormField } from "@frontend/components/authentication/FormField";
 import { Header } from "@frontend/components/layout/Header";
-import { Button } from "@frontend/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@frontend/components/ui/card";
-import { TitleHeader } from "@frontend/components/ui/title-header";
-import { Form, Formik } from "formik";
-import { useState } from "react";
 import { useUserStore } from "../../lib/services/authentication/userStore";
 import { ProfilePageCard } from "@frontend/components/profile/ProfilePageCard";
+import {
+  Tabs,
+  TabsTrigger,
+  TabsContent,
+  TabsList,
+} from "@frontend/components/ui/tabs";
+import { LayoutDashboard, Settings, Settings2 } from "lucide-react";
+import { SettingsCard } from "@frontend/components/profile/SettingsCard";
+import { Separator } from "@frontend/components/ui/separator";
+import { useGetMapByUserId } from "@frontend/lib/services/maps/useGetMapsByUserId";
+import { rqTrpc } from "@frontend/lib/services/trpc/client";
 
 export default function Profile() {
   const { user } = useUserStore();
 
-  const [initialValues, _setInitialValues] = useState({
-    username: user?.username || "",
-    email: user?.email || "",
-    password: "",
-  });
+  const {
+    isLoading: loadingMaps,
+    data: maps,
+    isSuccess: isSuccessMaps,
+  } = useGetMapByUserId(user);
 
-  const handleUpdate = async () => {};
+  const { isLoading, data, isSuccess } = rqTrpc.node.getAllByUserId.useQuery(
+    user?.id || null,
+  );
+
+  if (isLoading || !isSuccess || loadingMaps || !isSuccessMaps) return null;
+
+  const tabsTailwind =
+    "p-2 text-xl flex justify-start w-full gap-4 data-[state=active]:p-2 data-[state=active]:bg-dark-700 data-[state=inactive]:hover:bg-dark-800";
 
   return (
-    <div className="top-0 left-0 w-full h-full items-center justify-center">
-      <Header
-        middleHeaderItems={<TitleHeader>Hello {user?.username}</TitleHeader>}
-      />
-      <div className="flex gap-10">
-        <div className="flex">
-          <ProfilePageCard title="Your maps">3</ProfilePageCard>
-          <ProfilePageCard title="Your Nodes">3</ProfilePageCard>
+    <div className="flex flex-col gap-8 h-screen">
+      <Header />
+      <Tabs defaultValue="dashboard" className="flex-1 flex flex-row gap-2">
+        <>
+          <TabsList className="pl-10 bg-white dark:bg-dark-900 dark:text-white text-black flex flex-col gap-2 self-start">
+            <TabsTrigger value="dashboard" className={tabsTailwind}>
+              <LayoutDashboard size={24} strokeWidth={1} />
+              Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="settings" className={tabsTailwind}>
+              <Settings size={24} strokeWidth={1} />
+              User Settings
+            </TabsTrigger>
+            <TabsTrigger value="preferences" className={tabsTailwind}>
+              <Settings2 size={24} strokeWidth={1} />
+              Preferences
+            </TabsTrigger>
+          </TabsList>
+          <Separator orientation="vertical" />
+        </>
+        <div className="flex-1 flex justify-center">
+          <TabsContent value="dashboard">
+            <div className="flex gap-4">
+              <ProfilePageCard title="Your maps">{maps.length}</ProfilePageCard>
+              <ProfilePageCard title="Your Nodes">{data.count}</ProfilePageCard>
+            </div>
+          </TabsContent>
+          <TabsContent value="settings">
+            <SettingsCard />
+          </TabsContent>
+          <TabsContent value="preferences">
+            <p>Test</p>
+          </TabsContent>
         </div>
-        <div className="flex">
-          <div className="w-[400px] h-[480px]">
-            <Formik initialValues={initialValues} onSubmit={handleUpdate}>
-              {({ isSubmitting }) => (
-                <Form>
-                  <ProfilePageCard title="Do you want to do some changes? 🫐">
-                    <div className="flex flex-col gap-1.5">
-                      <FormField
-                        id="username"
-                        type="text"
-                        key={initialValues.username}
-                        placeholder="Wolfie"
-                      />
-                      <FormField
-                        id="email"
-                        type="email"
-                        key={initialValues.email}
-                        placeholder="jordan.belfort@gmail.com"
-                      />
-                      <FormField
-                        id="password"
-                        type="password"
-                        key={initialValues.password}
-                        placeholder="New Password"
-                      />
-                      <FormField
-                        id="passwordCheck"
-                        type="password"
-                        key={""}
-                        placeholder="New Password"
-                      />
-                    </div>
-                    <Button
-                      className="w-fit"
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
-                      Update Profile
-                    </Button>
-                  </ProfilePageCard>
-                </Form>
-              )}
-            </Formik>
-          </div>
-        </div>
-        <div className="flex"></div>
-      </div>
+      </Tabs>
     </div>
   );
 }
