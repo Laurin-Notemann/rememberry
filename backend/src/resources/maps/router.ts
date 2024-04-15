@@ -2,7 +2,7 @@ import { z } from "zod";
 import { privateProcedure } from "../../middleware/validateSession";
 import { router } from "../../trpc";
 import { mapControllerDrizzle } from "./map.controller";
-import { getTRPCError } from "@backend/utils";
+import { getTRPCError } from "../../utils";
 
 const createMapInput = z.object({
   userId: z.string(),
