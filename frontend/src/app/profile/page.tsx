@@ -12,6 +12,7 @@ import { TitleHeader } from "@frontend/components/ui/title-header";
 import { Form, Formik } from "formik";
 import { useState } from "react";
 import { useUserStore } from "../../lib/services/authentication/userStore";
+import { ProfilePageCard } from "@frontend/components/profile/ProfilePageCard";
 
 export default function Profile() {
   const { user } = useUserStore();
@@ -29,16 +30,17 @@ export default function Profile() {
       <Header
         middleHeaderItems={<TitleHeader>Hello {user?.username}</TitleHeader>}
       />
-      <div className="z-10 relative flex flex-col items-center justify-center min-h-screen">
-        <div className="w-[400px] h-[480px]">
-          <Formik initialValues={initialValues} onSubmit={handleUpdate}>
-            {({ isSubmitting }) => (
-              <Form>
-                <Card className="dark:bg-dark-800 dark:border-dark-800 p-4">
-                  <CardHeader>
-                    <CardTitle>Do you want to do some changes? 🫐</CardTitle>
-                  </CardHeader>
-                  <CardContent>
+      <div className="flex gap-10">
+        <div className="flex">
+          <ProfilePageCard title="Your maps">3</ProfilePageCard>
+          <ProfilePageCard title="Your Nodes">3</ProfilePageCard>
+        </div>
+        <div className="flex">
+          <div className="w-[400px] h-[480px]">
+            <Formik initialValues={initialValues} onSubmit={handleUpdate}>
+              {({ isSubmitting }) => (
+                <Form>
+                  <ProfilePageCard title="Do you want to do some changes? 🫐">
                     <div className="flex flex-col gap-1.5">
                       <FormField
                         id="username"
@@ -72,12 +74,13 @@ export default function Profile() {
                     >
                       Update Profile
                     </Button>
-                  </CardContent>
-                </Card>
-              </Form>
-            )}
-          </Formik>
+                  </ProfilePageCard>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
+        <div className="flex"></div>
       </div>
     </div>
   );

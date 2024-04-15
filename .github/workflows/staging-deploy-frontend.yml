@@ -1,4 +1,4 @@
-name: Staging Deployment Frontend 
+name: Staging Deployment Frontend
 
 on:
   workflow_dispatch:
@@ -24,9 +24,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: install dependencies
-        run: pnpm i --frozen-lockfile 
+        run: pnpm i --frozen-lockfile
       - name: lint
         run: pnpm run frontend lint
       - name: check formatting
@@ -50,16 +50,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: install dependencies
-        run: pnpm i --frozen-lockfile 
+        run: pnpm i --frozen-lockfile
       - name: test
         run: pnpm run frontend test
 
   build-image:
     runs-on: ubuntu-22.04
     needs: [lint-format, test]
-    name: build & push docker image
+    name:
+      build & push docker image
       # if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v4
@@ -71,7 +72,7 @@ jobs:
       - name: docker metadata
         id: metadata
         uses: docker/metadata-action@v5
-        with: 
+        with:
           images: notemann27/rememberry-frontend
           tags: |
             type=raw,value=${{ github.sha }}
@@ -96,12 +97,12 @@ jobs:
             "NEXT_PUBLIC_APP_ENV=staging"
             "NEXT_PUBLIC_BACKEND_PORT=3050"
             "APP_ENV=staging"
-            "FRONTEND_HOST=web.stage.rememberry.app"
             "PORT=3000"
 
   push-staging:
     runs-on: ubuntu-22.04
-    name: deploy changes on staging frontend
+    name:
+      deploy changes on staging frontend
       # if: github.ref == 'refs/heads/master'
     needs: [build-image]
     steps:

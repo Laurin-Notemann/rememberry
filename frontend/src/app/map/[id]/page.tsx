@@ -37,6 +37,7 @@ import "reactflow/dist/style.css";
 import { Card, CardContent } from "@frontend/components/ui/card";
 import { DifficultyPicker } from "@frontend/components/layout/DifficultyPicker";
 import { TitleHeader } from "@frontend/components/ui/title-header";
+import { useUserStore } from "@frontend/lib/services/authentication/userStore";
 
 const nodeTypes = {
   node: NodeMemo,
@@ -306,15 +307,18 @@ type MapParams = {
 };
 
 export default function MapFlow({ params }: MapParams) {
+  const user = useUserStore((store) => store.user);
   const { isLoading, data, isError } = useGetNodesByMapId(params.id);
 
-  const { isLoading: mapLoading, maps } = useGetMapByUserId();
+  const {
+    isLoading: mapLoading,
+    isSuccess,
+    data: maps,
+  } = useGetMapByUserId(user);
 
-  if (isLoading || mapLoading) {
+  if (isLoading || mapLoading || mapLoading || !isSuccess || isError)
     return null;
-  } else if (isError) {
-    return null;
-  }
+
   const edges = data.reduce<Edge[]>((acc, node) => {
     if (node.parentNodeId) {
       acc.push({
