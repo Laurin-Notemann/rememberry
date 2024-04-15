@@ -1,15 +1,22 @@
 import { TRPCClientError } from "@trpc/client";
 import { rqTrpc } from "../trpc/client";
-import { useUserStore } from "./userStore";
+import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 
 export const useLogoutUser = () => {
-  const userCreator = rqTrpc.auth.logout.useMutation();
-  const userStore = useUserStore();
+  const queryClient = useQueryClient();
+
+  const userCreator = rqTrpc.auth.logout.useMutation({
+    onSuccess() {
+      queryClient.refetchQueries({
+        queryKey: getQueryKey(rqTrpc.user.getUserBySession, undefined, "query"),
+      });
+    },
+  });
+
   const logoutUser = async () => {
     try {
       await userCreator.mutateAsync();
-
-      userStore.actions.deleteUser();
 
       return [null, true] as const;
     } catch (error) {

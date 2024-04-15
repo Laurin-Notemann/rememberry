@@ -1,15 +1,28 @@
-import { userLoader } from "@frontend/lib/services/authentication/userloader";
-import { cookies } from "next/headers";
-import { FC, ReactNode } from "react";
-import { FetchUser } from "./FetchUser";
+"use client";
+import { useGetUserBySession } from "@frontend/lib/services/authentication/useGetUserBySession";
+import { useUserStore } from "@frontend/lib/services/authentication/userStore";
+import { FC, ReactNode, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 type UserProviderProps = {
   children: ReactNode;
 };
 
-export const UserProvider: FC<UserProviderProps> = async ({ children }) => {
-  const session = cookies().get("auth_session")?.value;
-  const user = await userLoader(session);
+export const UserProvider: FC<UserProviderProps> = ({ children }) => {
+  const userStore = useUserStore((store) => store);
 
-  return <FetchUser user={user}>{children}</FetchUser>;
+  const { isLoading, data, isSuccess, isError } = useGetUserBySession();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && isSuccess) {
+      userStore.actions.setUser(data);
+    } else if (!isLoading && !isSuccess && isError) {
+      userStore.actions.deleteUser();
+      router.push("/login");
+    }
+  }, [isLoading, isSuccess, data, userStore.actions, isError, router]);
+
+  return isLoading ? null : children;
 };

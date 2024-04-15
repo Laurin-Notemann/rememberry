@@ -21,11 +21,7 @@ export const ProfileDropdown = () => {
 
   const handleLogout = async () => {
     router.push("/login");
-
-    const [error, _success] = await logout();
-
-    //TODO: handle error
-    if (error) return;
+    await logout();
   };
   return (
     <DropdownMenu>

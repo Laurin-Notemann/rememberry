@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@frontend/components/ui/card";
-import { useUserStore } from "@frontend/lib/services/authentication/userStore";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
@@ -53,7 +52,8 @@ export default function Login() {
                 if (error) {
                   setFieldError("email", error);
                 } else {
-                  router.push("/");
+                  console.log("logged int push ot /");
+                  setTimeout(() => router.push("/"), 100);
                 }
               }}
             >

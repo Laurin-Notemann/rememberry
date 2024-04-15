@@ -2,6 +2,7 @@ import { z } from "zod";
 import { privateProcedure } from "../../middleware/validateSession";
 import { router } from "../../trpc";
 import { mapControllerDrizzle } from "./map.controller";
+import { getTRPCError } from "@backend/utils";
 
 const createMapInput = z.object({
   userId: z.string(),
@@ -26,13 +27,18 @@ export const mapRouter = router({
     return map;
   }),
 
-  getUsersMaps: privateProcedure.input(z.string()).query(async (opts) => {
-    const [err, maps] = await mapControllerDrizzle.getMapsByUserId(opts.input);
+  getUsersMaps: privateProcedure
+    .input(z.string().nullable())
+    .query(async (opts) => {
+      if (!opts.input) throw getTRPCError(null, "userId was null")[0];
+      const [err, maps] = await mapControllerDrizzle.getMapsByUserId(
+        opts.input,
+      );
 
-    if (err) throw err;
+      if (err) throw err;
 
-    return maps;
-  }),
+      return maps;
+    }),
 
   updateMap: privateProcedure.input(updateMapInput).mutation(async (opts) => {
     const [err, map] = await mapControllerDrizzle.updateMapById(opts.input);

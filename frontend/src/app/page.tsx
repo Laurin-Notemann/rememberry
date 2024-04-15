@@ -13,17 +13,18 @@ import { Box } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { Header } from "@frontend/components/layout/Header";
 import { TitleHeader } from "@frontend/components/ui/title-header";
+import { FC } from "react";
 
-export default function Home() {
-  const { isLoading, maps } = useGetMapByUserId();
+export default function Root() {
+  const user = useUserStore((store) => store.user);
 
-  const userStore = useUserStore();
-
-  const router = useRouter();
+  const { isLoading, isSuccess, isError, data } = useGetMapByUserId(user);
 
   const createMap = useCreateMap();
   const deleteMap = useDeleteMap();
   const updateMap = useUpdateMap();
+
+  const router = useRouter();
 
   const {
     dialogOpen,
@@ -36,10 +37,9 @@ export default function Home() {
     closeDialog,
   } = useCreateOrUpdateMapDialog();
 
-  if (!userStore.user) router.push("/login");
-  if (isLoading) return <></>;
+  if (!user || isLoading || !isSuccess || isError) return null;
 
-  const mapsSortedByDescendingCreatedDate = maps.sort(
+  const mapsSortedByDescendingCreatedDate = data.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 
@@ -47,21 +47,19 @@ export default function Home() {
    * handles the creation or editing of a map.
    */
   const createOrUpdateMap = async (name: string, description: string) => {
-    if (userStore.user!.id) {
+    if (user!.id) {
       if (isCreate) {
         const [_err, map] = await createMap({
           name,
           description,
-          userId: userStore.user!.id,
+          userId: user!.id,
         });
         if (map) {
           router.push("/map/" + map.id);
         }
       } else {
-        const map = maps.find((m) => m.id === mapIdEdit);
+        const map = data.find((m) => m.id === mapIdEdit);
         if (map) {
-          console.log(name, description);
-
           map.name = name;
           map.description = description;
           updateMap(map);

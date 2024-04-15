@@ -22,9 +22,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: install dependencies
-        run: pnpm i --frozen-lockfile 
+        run: pnpm i --frozen-lockfile
       - name: lint
         run: pnpm run frontend lint
       - name: check formatting
@@ -48,9 +48,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: install dependencies
-        run: pnpm i --frozen-lockfile 
+        run: pnpm i --frozen-lockfile
       - name: test
         run: pnpm run frontend test
 
@@ -62,7 +62,6 @@ jobs:
       NEXT_PUBLIC_BACKEND_PORT: "3050"
       NEXT_PUBLIC_APP_ENV: "development"
       APP_ENV: "development"
-      FRONTEND_HOST: "127.0.0.1"
     steps:
       - name: checkout code
         uses: actions/checkout@v4
@@ -74,8 +73,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: install dependencies
-        run: pnpm i --frozen-lockfile 
+        run: pnpm i --frozen-lockfile
       - name: build
         run: pnpm run frontend build

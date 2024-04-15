@@ -10,7 +10,6 @@ const middlewareLogger = new ScopedLogger("Middleware");
 
 const isLoggedIn = middleware(async ({ next, ctx }) => {
   const { req, res } = ctx;
-  middlewareLogger.debug("Request:", req);
   const method = req.method;
   const headers = req.headers;
   if (method === "POST") {
@@ -30,7 +29,7 @@ const isLoggedIn = middleware(async ({ next, ctx }) => {
 
   const sessionId = lucia.lucia.readSessionCookie(cookieHeader ?? "");
   if (!sessionId) {
-    middlewareLogger.debug("sessionId not found");
+    middlewareLogger.debug("sessionId not found", cookieHeader);
     throw getTRPCError(middlewareLogger, "Invalid cookie", "UNAUTHORIZED")[0];
   }
 
