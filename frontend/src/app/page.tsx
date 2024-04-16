@@ -75,44 +75,41 @@ export default function Root() {
   };
 
   return (
-    <div className="relative w-full h-full">
-      <Header
-        middleHeaderItems={
-          <TitleHeader>Which map do you want to learn today?</TitleHeader>
-        }
-      />
-      <div className="z-10 absolute top-0 left-0 h-screen">
-        {dialogOpen && (
-          <DialogTwoInputs
-            topInput={dialogName}
-            bottomInput={dialogDescription}
-            placeholderTopInput={"Name"}
-            placeholderBottomInput={"Description"}
-            isDialogOpen={dialogOpen}
-            onSubmit={createOrUpdateMap}
-            closeDialog={closeDialog}
-            classNameInputFields={""}
-          />
+    <div className="flex flex-col gap-4">
+      <Header middleHeaderItems={<TitleHeader>Map Overview</TitleHeader>} />
+      {dialogOpen && (
+        <DialogTwoInputs
+          topInput={dialogName}
+          bottomInput={dialogDescription}
+          placeholderTopInput={"Name"}
+          placeholderBottomInput={"Description"}
+          isDialogOpen={dialogOpen}
+          onSubmit={createOrUpdateMap}
+          closeDialog={closeDialog}
+          classNameInputFields={""}
+        />
+      )}
+      <div
+        id="body"
+        className="flex flex-col gap-8 self-center md:flex-wrap md:flex-row md:px-8"
+      >
+        {mapsSortedByDescendingCreatedDate.map(
+          (map: { id: string; name: string; description: string }) => (
+            <div className="outline-none" key={map.id}>
+              <Box>
+                <MapPreviewCard
+                  map={map}
+                  openEditMapDialog={openDialog}
+                  deleteMap={deleteMap}
+                />
+              </Box>
+            </div>
+          ),
         )}
-        <div id="body" className="flex content-start p-20 flex-wrap">
-          {mapsSortedByDescendingCreatedDate.map(
-            (map: { id: string; name: string; description: string }) => (
-              <div className="outline-none   mx-5 my-5" key={map.id}>
-                <Box>
-                  <MapPreviewCard
-                    map={map}
-                    openEditMapDialog={openDialog}
-                    deleteMap={deleteMap}
-                  />
-                </Box>
-              </div>
-            ),
-          )}
-        </div>
-        <Footer>
-          <Button onClick={() => openDialog(true)}>Add Map</Button>
-        </Footer>
       </div>
+      <Footer>
+        <Button onClick={() => openDialog(true)}>Add Map</Button>
+      </Footer>
     </div>
   );
 }

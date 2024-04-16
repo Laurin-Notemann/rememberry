@@ -22,6 +22,8 @@ const EnvZod = z.object({
   REDIS_PASSWORD: z.string(),
   FRONTEND_HOST: z.string(),
   FRONTEND_PORT: z.number(),
+  SCW_SECRET_KEY: z.string(),
+  SCW_PROJECT_ID: z.string(),
 });
 
 function getEnvSrc() {

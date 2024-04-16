@@ -30,7 +30,7 @@ export type UserControllerOutput = {
 };
 
 export const UserRouterOutput = z.object({
+  id: z.string(),
   username: z.string(),
   email: z.string(),
-  id: z.string(),
 });

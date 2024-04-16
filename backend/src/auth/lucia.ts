@@ -7,7 +7,16 @@ import { session, users } from "../db/schema";
 import { env } from "../env";
 
 export class LuciaAuth {
-  lucia: Lucia<Record<never, never>, { username: string; email: string }>;
+  lucia: Lucia<
+    Record<never, never>,
+    {
+      username: string;
+      email: string;
+      confirmed: boolean;
+      createdAt: Date;
+      updatedAt: Date;
+    }
+  >;
   constructor(drizzle: NodePgDatabase<typeof schema>) {
     const adapter = new DrizzlePostgreSQLAdapter(drizzle, session, users);
     this.lucia = new Lucia(adapter, {
@@ -15,6 +24,9 @@ export class LuciaAuth {
         return {
           username: data.username,
           email: data.email,
+          confirmed: data.confirmed,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt,
         };
       },
       sessionExpiresIn: new TimeSpan(30, "d"), // no more active/idle
@@ -39,6 +51,9 @@ export class LuciaAuth {
         return {
           username: data.username,
           email: data.email,
+          confirmed: data.confirmed,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt,
         };
       },
       sessionExpiresIn: new TimeSpan(30, "d"), // no more active/idle
@@ -65,6 +80,9 @@ declare module "lucia" {
     DatabaseUserAttributes: {
       username: string;
       email: string;
+      confirmed: boolean;
+      createdAt: Date;
+      updatedAt: Date;
     };
   }
 }

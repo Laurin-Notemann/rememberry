@@ -3,11 +3,6 @@ import { testModel } from "./model";
 
 export const testRouter = router({
   test: publicProcedure.query(async (opts) => {
-    testModel.exampleUsage({
-      username: "test",
-      email: "test@test",
-      password: "testtest",
-    });
     return "success";
   }),
 });

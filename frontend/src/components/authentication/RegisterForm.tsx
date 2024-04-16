@@ -1,36 +1,31 @@
 import { Form, Formik, FormikHelpers } from "formik";
-import { FormField } from "../authentication/FormField";
-import { Button } from "../ui/button";
-import { rqTrpc } from "@frontend/lib/services/trpc/client";
 import { useRouter } from "next/navigation";
+import { FormField } from "./FormField";
+import { Button } from "../ui/button";
+import { useRegisterUser } from "@frontend/lib/services/authentication/useRegisterUser";
 import z from "zod";
-import { TRPCClientError } from "@trpc/client";
-import { RememberryCard } from "../authentication/RememberryCard";
+import { RememberryCard } from "./RememberryCard";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { useUserStore } from "@frontend/lib/services/authentication/userStore";
 
-const UpdateUserFormSchema = z.object({
+const RegisterFormSchema = z.object({
   username: z.string(),
   email: z.string().email("Must be a valid Email"),
   password: z.string().min(6, "At least 6 characters"),
   confirmPassword: z.string().min(6, "At least 6 characters"),
 });
 
-type UpdateUserFormInput = {
+type RegisterFormInput = {
   username: string;
   email: string;
   password: string;
   confirmPassword: string;
 };
 
-export const SettingsCard = () => {
-  const updateUser = rqTrpc.user.updateUserById.useMutation();
+export const RegisterForm = () => {
+  const register = useRegisterUser();
   const router = useRouter();
-  const user = useUserStore((state) => state.user);
 
-  if (!user) return null;
-
-  const validateSamePassword = (values: UpdateUserFormInput) => {
+  const validateSamePassword = (values: RegisterFormInput) => {
     if (values.password !== values.confirmPassword)
       return {
         confirmPassword: "Passwords do not match",
@@ -39,39 +34,33 @@ export const SettingsCard = () => {
   };
 
   const submit = async (
-    values: UpdateUserFormInput,
-    { setFieldError }: FormikHelpers<UpdateUserFormInput>,
+    values: RegisterFormInput,
+    { setFieldError }: FormikHelpers<RegisterFormInput>,
   ) => {
-    try {
-      const userToUpdate = {
-        id: user.id,
-        username: values.username,
-        email: values.email,
-        password: values.password,
-      };
-      await updateUser.mutateAsync(userToUpdate);
-    } catch (error) {
-      if (error instanceof TRPCClientError) {
-        if (error.message.includes("Username"))
-          setFieldError("username", error.message);
-        else if (error.message.includes("Email"))
-          setFieldError("email", error.message);
-      } else setFieldError("confirmPassword", "something went wrong");
+    const [error] = await register({ user: values });
+    if (error) {
+      if (error.includes("Username")) setFieldError("username", error);
+      else if (error.includes("Email")) setFieldError("email", error);
+      else setFieldError("confirmPassword", error);
+    } else {
+      console.log("test");
+
+      setTimeout(() => router.push("/confirm"), 200);
     }
   };
   return (
-    <RememberryCard title="Update user">
+    <RememberryCard title="Welcome to rememberry">
       <Formik
         initialValues={{
-          username: user.username,
-          email: user.email,
+          username: "",
+          email: "",
           password: "",
           confirmPassword: "",
         }}
         validateOnMount={false}
         validateOnBlur={false}
         validateOnChange={false}
-        validationSchema={toFormikValidationSchema(UpdateUserFormSchema)}
+        validationSchema={toFormikValidationSchema(RegisterFormSchema)}
         validate={validateSamePassword}
         onSubmit={submit}
       >
@@ -101,7 +90,7 @@ export const SettingsCard = () => {
             placeholder="Confirm Password"
           />
           <Button className="w-fit" type="submit">
-            Update
+            Register
           </Button>
         </Form>
       </Formik>

@@ -37,3 +37,13 @@ export type LogoutInput = {
     };
   };
 };
+
+export const PasswortResetEmailInput = z.string().email();
+export const PasswordResetInput = z.object({
+  userId: z.string(),
+  password: z.string(),
+});
+export type PasswordReset = {
+  userId: string;
+  password: string;
+};
