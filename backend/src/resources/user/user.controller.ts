@@ -9,6 +9,7 @@ import { UserModel, userModelDrizzle } from "./user.model";
 export interface UserController {
   createUser(input: NewUser): Promise<TRPCStatus<User>>;
   getUserByEmail(email: string): Promise<TRPCStatus<User>>;
+  getUserById(id: string): Promise<TRPCStatus<User>>;
   getUserBySession(
     input: GetUserBySessionInput,
   ): Promise<TRPCStatus<luciaUser>>;
@@ -28,8 +29,7 @@ class LuciaUserController implements UserController {
   async createUser(input: NewUser): Promise<TRPCStatus<User>> {
     try {
       const userAtrributes = {
-        username: input.username,
-        email: input.email,
+        ...input,
         password: await new Scrypt().hash(input.password),
       };
 
@@ -45,6 +45,11 @@ class LuciaUserController implements UserController {
   }
   async getUserByEmail(email: string): Promise<TRPCStatus<User>> {
     const [err, user] = await this.userModel.getUserByEmail(email);
+    if (err) return getTRPCError(this.logger, err.message, err.code);
+    return [null, user] as const;
+  }
+  async getUserById(id: string): Promise<TRPCStatus<User>> {
+    const [err, user] = await this.userModel.getUserById(id);
     if (err) return getTRPCError(this.logger, err.message, err.code);
     return [null, user] as const;
   }

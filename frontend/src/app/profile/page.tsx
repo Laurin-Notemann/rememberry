@@ -35,9 +35,12 @@ export default function Profile() {
   return (
     <div className="flex flex-col gap-8 h-screen">
       <Header />
-      <Tabs defaultValue="dashboard" className="flex-1 flex flex-row gap-2">
+      <Tabs
+        defaultValue="dashboard"
+        className="flex-1 flex flex-col md:flex-row gap-8 md:gap-2"
+      >
         <>
-          <TabsList className="pl-10 bg-white dark:bg-dark-900 dark:text-white text-black flex flex-col gap-2 self-start">
+          <TabsList className=" bg-white dark:bg-dark-900 dark:text-white text-black flex flex-col gap-2 self-center md:self-start md:pl-10">
             <TabsTrigger value="dashboard" className={tabsTailwind}>
               <LayoutDashboard size={24} strokeWidth={1} />
               Dashboard
@@ -51,7 +54,7 @@ export default function Profile() {
               Preferences
             </TabsTrigger>
           </TabsList>
-          <Separator orientation="vertical" />
+          <Separator className="hidden md:block" orientation="vertical" />
         </>
         <div className="flex-1 flex justify-center">
           <TabsContent value="dashboard">

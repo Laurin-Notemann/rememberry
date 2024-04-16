@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { RegisterUserOutput } from "./useRegisterUser";
+import { ConfirmOutput } from "./useRegisterUser";
 
 export type User = {
   id: string;
@@ -11,7 +11,7 @@ interface UserStore {
   user: User | null;
 
   actions: {
-    setUser: (user: RegisterUserOutput) => RegisterUserOutput;
+    setUser: (user: ConfirmOutput) => ConfirmOutput;
     deleteUser: () => void;
   };
 }
@@ -19,7 +19,7 @@ interface UserStore {
 export const useUserStore = create<UserStore>((set) => ({
   user: null,
   actions: {
-    setUser: (user): RegisterUserOutput => {
+    setUser: (user): ConfirmOutput => {
       set(() => ({
         user: user,
       }));

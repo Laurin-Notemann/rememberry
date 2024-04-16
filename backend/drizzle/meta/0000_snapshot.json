@@ -1,8 +1,8 @@
 {
+  "id": "84315fa1-f107-4065-a1dc-ff45cf1139ec",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
-  "id": "83a27f4a-c5b7-4843-8fb9-29121004c494",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "invites": {
       "name": "invites",
@@ -553,6 +553,26 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
+        },
+        "confirmed": {
+          "name": "confirmed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -643,8 +663,8 @@
   },
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {}
   }
 }

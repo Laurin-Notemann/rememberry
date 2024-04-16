@@ -3,11 +3,17 @@ import { DatabaseError } from "pg";
 import { DrizzleDB, db } from "../../db/db";
 import { NewUser, User, users } from "../../db/schema";
 import { Logger, ScopedLogger } from "../../logger";
-import { TRPCStatus, getTRPCError, hasOnlyOneEntry } from "../../utils";
+import {
+  TRPCStatus,
+  catchDrizzleErrorOneEntry,
+  getTRPCError,
+  hasOnlyOneEntry,
+} from "../../utils";
 
 export interface UserModel {
   createUser: (user: NewUser) => Promise<TRPCStatus<User>>;
   getUserByEmail: (email: string) => Promise<TRPCStatus<User>>;
+  getUserById: (email: string) => Promise<TRPCStatus<User>>;
   updateUserById: (input: User) => Promise<TRPCStatus<User>>;
   deleteUserById: (id: string) => Promise<TRPCStatus<User>>;
 }
@@ -77,15 +83,18 @@ class UserModelDrizzle implements UserModel {
       return getTRPCError(this.logger);
     }
   }
+  async getUserById(id: string): Promise<TRPCStatus<User>> {
+    return catchDrizzleErrorOneEntry(
+      () => this.db.drizzle.select().from(users).where(eq(users.id, id)),
+      this.logger,
+    );
+  }
+
   async updateUserById(userInput: User) {
     try {
       const user = await this.db.drizzle
         .update(users)
-        .set({
-          username: userInput.username,
-          email: userInput.email,
-          password: userInput.password,
-        })
+        .set(userInput)
         .where(eq(users.id, userInput.id))
         .returning();
 
