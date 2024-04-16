@@ -122,5 +122,6 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           KUBE_ENV_SECRET: ${{ secrets.KUBE_SECRETS_ENV_BACKEND}}
         run: |
+          touch base/.env
           cat $KUBE_ENV_SECRET > base/.env
           kubectl apply -k staging
