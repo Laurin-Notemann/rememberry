@@ -1,6 +1,6 @@
-import { env } from "@backend/env";
-import { Logger, ScopedLogger } from "@backend/logger";
-import { TRPCStatus, getFrontendUrl, getTRPCError } from "@backend/utils";
+import { env } from "../../env";
+import { Logger, ScopedLogger } from "../../logger";
+import { TRPCStatus, getFrontendUrl, getTRPCError } from "../../utils";
 import axios, { AxiosError } from "axios";
 
 export interface SendMail {

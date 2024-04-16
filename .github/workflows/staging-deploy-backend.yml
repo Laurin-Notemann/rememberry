@@ -113,9 +113,14 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
         working-directory: "deployments/backend/base"
         run: |
+          
           kustomize edit set image rem-backend-image=notemann27/rememberry-backend:$GITHUB_SHA
 
       - name: apply new config to deploy in cluster
         working-directory: "deployments/backend"
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          KUBE_ENV_SECRET: ${{ secrets.KUBE_SECRETS_ENV_BACKEND}}
         run: |
+          cat $KUBE_ENV_SECRET > base/.env
           kubectl apply -k staging
